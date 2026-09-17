@@ -105,7 +105,15 @@ Item {
                 return r < 0 ? saved.length : r;
             };
             list.sort((a, b) => rank(a.slug) - rank(b.slug));
-            store.activeSlug = state.active || "";
+            // an active slug whose folder is gone (deleted profile) is cleared,
+            // so nothing keeps saving into a profile that no longer exists
+            const active = state.active || "";
+            store.activeSlug = list.some(p => p.slug === active) ? active : "";
+            if (active && store.activeSlug !== active)
+                store.writeJson(store.root + "/state.json", {
+                    "active": "",
+                    "order": list.map(p => p.slug)
+                }, null);
             store.order = saved;
             store.profiles = list;
             store.loaded = true;
@@ -206,13 +214,16 @@ Item {
             store.writeJson(store.dir(target) + "/profile.json", p, () => {
                 const start = store.dir(target) + "/.start/profile.json";
                 store.sh("[ -f " + store.quote(start) + " ]", (o, c) => {
+                    // state first, then read back: a refresh would take the old
+                    // slug from state.json and write it again
                     const finish = () => {
                         if (store.activeSlug === slug)
                             store.activeSlug = target;
-                        const i = store.order.indexOf(slug);
-                        if (i >= 0)
-                            store.order[i] = target;
-                        store.refresh(() => store.writeState(() => callback && callback("")));
+                        const order = store.profiles.map(p => p.slug === slug ? target : p.slug);
+                        store.writeJson(store.root + "/state.json", {
+                            "active": store.activeSlug,
+                            "order": order
+                        }, () => store.refresh(() => callback && callback("")));
                     };
                     if (c !== 0) {
                         finish();
@@ -240,7 +251,11 @@ Item {
         store.sh("rm -rf -- " + store.quote(store.dir(slug)), (out, code) => {
             if (store.activeSlug === slug)
                 store.activeSlug = "";
-            store.refresh(() => store.writeState(() => callback && callback(code === 0)));
+            const order = store.profiles.map(p => p.slug).filter(s => s !== slug);
+            store.writeJson(store.root + "/state.json", {
+                "active": store.activeSlug,
+                "order": order
+            }, () => store.refresh(() => callback && callback(code === 0)));
         });
     }
 
