@@ -1,0 +1,248 @@
+{
+    "Profiles": {
+        "Profiles": "Профили"
+    },
+    "A profile stores the look of the shell: theme and accent, light or dark, wallpaper, bars, frame, transparency, fonts and desktop widgets. Changes you make later are saved into the active profile.": {
+        "A profile stores the look of the shell: theme and accent, light or dark, wallpaper, bars, frame, transparency, fonts and desktop widgets. Changes you make later are saved into the active profile.": "Профиль хранит внешний вид оболочки: тему и акцентный цвет, светлый или тёмный режим, обои, панели, рамку, прозрачность, шрифты и виджеты рабочего стола. Последующие изменения сохраняются в активный профиль."
+    },
+    "Name for a new profile from the current look": {
+        "Name for a new profile from the current look": "Имя нового профиля на основе текущего вида"
+    },
+    "Create": {
+        "Create": "Создать"
+    },
+    "No profiles yet.": {
+        "No profiles yet.": "Профилей пока нет."
+    },
+    "No profiles yet. Create one in Settings under Profiles.": {
+        "No profiles yet. Create one in Settings under Profiles.": "Профилей пока нет. Создайте профиль в настройках, раздел «Профили»."
+    },
+    "active": {
+        "active": "активен"
+    },
+    "active profile": {
+        "active profile": "активный профиль"
+    },
+    "Enter or click to apply": {
+        "Enter or click to apply": "Enter или щелчок для применения"
+    },
+    "Apply": {
+        "Apply": "Применить"
+    },
+    "Undo changes since the profile was activated": {
+        "Undo changes since the profile was activated": "Отменить изменения с момента активации профиля"
+    },
+    "Rename": {
+        "Rename": "Переименовать"
+    },
+    "Click again to delete": {
+        "Click again to delete": "Нажмите ещё раз, чтобы удалить"
+    },
+    "Delete": {
+        "Delete": "Удалить"
+    },
+    "Profile picker": {
+        "Profile picker": "Выбор профиля"
+    },
+    "Open it with a keybind: dms ipc call profiles toggle": {
+        "Open it with a keybind: dms ipc call profiles toggle": "Открывается горячей клавишей: dms ipc call profiles toggle"
+    },
+    "View": {
+        "View": "Вид"
+    },
+    "Strip": {
+        "Strip": "Лента"
+    },
+    "Free, without a panel": {
+        "Free, without a panel": "Свободно, без подложки"
+    },
+    "Carousel": {
+        "Carousel": "Карусель"
+    },
+    "Grid": {
+        "Grid": "Сетка"
+    },
+    "Shape": {
+        "Shape": "Форма"
+    },
+    "Portrait": {
+        "Portrait": "Вертикально"
+    },
+    "Landscape": {
+        "Landscape": "Горизонтально"
+    },
+    "Square": {
+        "Square": "Квадрат"
+    },
+    "Circle": {
+        "Circle": "Круг"
+    },
+    "Hexagon": {
+        "Hexagon": "Шестиугольник"
+    },
+    "Diamond": {
+        "Diamond": "Ромб"
+    },
+    "Glow around the selection": {
+        "Glow around the selection": "Свечение вокруг выбранного"
+    },
+    "Outline around the selection": {
+        "Outline around the selection": "Обводка вокруг выбранного"
+    },
+    "Check mark on the active profile": {
+        "Check mark on the active profile": "Галочка у активного профиля"
+    },
+    "Corner radius like windows": {
+        "Corner radius like windows": "Скругление как у окон"
+    },
+    "Uses the window corner radius that DMS sets for the compositor.": {
+        "Uses the window corner radius that DMS sets for the compositor.": "Использует радиус скругления окон, который DMS задаёт композитору."
+    },
+    "Corner radius": {
+        "Corner radius": "Радиус скругления"
+    },
+    "Transition": {
+        "Transition": "Переход"
+    },
+    "While switching, the screen is frozen, the profile is applied underneath and then revealed with an animation, so bars, colors and wallpaper change in one step.": {
+        "While switching, the screen is frozen, the profile is applied underneath and then revealed with an animation, so bars, colors and wallpaper change in one step.": "При переключении экран замирает, профиль применяется под ним и затем открывается с анимацией, поэтому панели, цвета и обои меняются за один шаг."
+    },
+    "Random": {
+        "Random": "Случайный"
+    },
+    "Fade": {
+        "Fade": "Затухание"
+    },
+    "Wipe": {
+        "Wipe": "Шторка"
+    },
+    "Circle from the center": {
+        "Circle from the center": "Круг из центра"
+    },
+    "Iris": {
+        "Iris": "Диафрагма"
+    },
+    "Pixelate": {
+        "Pixelate": "Пикселизация"
+    },
+    "Stripes": {
+        "Stripes": "Полосы"
+    },
+    "Burn away": {
+        "Burn away": "Сгорание"
+    },
+    "Zoom": {
+        "Zoom": "Зум"
+    },
+    "Slide away": {
+        "Slide away": "Сдвиг"
+    },
+    "Doors": {
+        "Doors": "Двери"
+    },
+    "Blinds": {
+        "Blinds": "Жалюзи"
+    },
+    "Tiles": {
+        "Tiles": "Плитки"
+    },
+    "Wave": {
+        "Wave": "Волна"
+    },
+    "Clock": {
+        "Clock": "Часы"
+    },
+    "Dots": {
+        "Dots": "Точки"
+    },
+    "Swirl": {
+        "Swirl": "Водоворот"
+    },
+    "Ripple": {
+        "Ripple": "Рябь"
+    },
+    "Melt": {
+        "Melt": "Таяние"
+    },
+    "Blur": {
+        "Blur": "Размытие"
+    },
+    "Dissolve": {
+        "Dissolve": "Растворение"
+    },
+    "Through black": {
+        "Through black": "Через чёрный"
+    },
+    "Shatter": {
+        "Shatter": "Осколки"
+    },
+    "Hack: data corruption": {
+        "Hack: data corruption": "Хак: повреждение данных"
+    },
+    "Hack: code rain": {
+        "Hack: code rain": "Хак: дождь из кода"
+    },
+    "Hack: signal loss": {
+        "Hack: signal loss": "Хак: потеря сигнала"
+    },
+    "Hack: pixel sorting": {
+        "Hack: pixel sorting": "Хак: сортировка пикселей"
+    },
+    "Hack: scan": {
+        "Hack: scan": "Хак: сканирование"
+    },
+    "CRT off": {
+        "CRT off": "Выключение кинескопа"
+    },
+    "Off": {
+        "Off": "Выкл."
+    },
+    "Type": {
+        "Type": "Тип"
+    },
+    "Random picks from": {
+        "Random picks from": "Случайный выбирает из"
+    },
+    "Duration": {
+        "Duration": "Длительность"
+    },
+    "Glowing edge": {
+        "Glowing edge": "Светящийся край"
+    },
+    "The edge of the animation glows in the accent color of the new profile.": {
+        "The edge of the animation glows in the accent color of the new profile.": "Край анимации светится акцентным цветом нового профиля."
+    },
+    "Preview transition": {
+        "Preview transition": "Попробовать переход"
+    },
+    "Advanced": {
+        "Advanced": "Дополнительно"
+    },
+    "Save changes into the active profile": {
+        "Save changes into the active profile": "Сохранять изменения в активный профиль"
+    },
+    "Plugins saved with a profile": {
+        "Plugins saved with a profile": "Плагины, сохраняемые в профиле"
+    },
+    "Plugin ids separated by commas, for example audioFx.": {
+        "Plugin ids separated by commas, for example audioFx.": "ID плагинов через запятую, например audioFx."
+    },
+    "Save command": {
+        "Save command": "Команда сохранения"
+    },
+    "Optional. Runs when a profile is saved and prints JSON, stored with the profile. For settings outside DMS.": {
+        "Optional. Runs when a profile is saved and prints JSON, stored with the profile. For settings outside DMS.": "Необязательно. Выполняется при сохранении профиля и выводит JSON, который сохраняется вместе с профилем. Для настроек вне DMS."
+    },
+    "Apply command": {
+        "Apply command": "Команда применения"
+    },
+    "Optional. Runs after switching, before the screen is revealed. DMS_PROFILE_DIR, DMS_PROFILE_SLUG and DMS_PROFILE_NAME are set.": {
+        "Optional. Runs after switching, before the screen is revealed. DMS_PROFILE_DIR, DMS_PROFILE_SLUG and DMS_PROFILE_NAME are set.": "Необязательно. Выполняется после переключения, до того как экран откроется. Заданы DMS_PROFILE_DIR, DMS_PROFILE_SLUG и DMS_PROFILE_NAME."
+    },
+    "Could not switch profile": {
+        "Could not switch profile": "Не удалось переключить профиль"
+    },
+    "Snowstorm": {
+        "Snowstorm": "Снег на экране"
+    }
+}

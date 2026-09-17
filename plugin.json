@@ -1,0 +1,20 @@
+{
+    "id": "dmsProfiles",
+    "name": "Profiles",
+    "description": "Save the complete look of the shell (theme, accent, light or dark, wallpaper, bars, frame, transparency, desktop widgets) as profiles and switch between them with an animated transition",
+    "version": "2.0.0",
+    "author": "satoshoe",
+    "type": "daemon",
+    "capabilities": [
+        "daemon"
+    ],
+    "component": "./ProfilesDaemon.qml",
+    "settings": "./ProfilesSettings.qml",
+    "icon": "palette",
+    "requires_dms": ">=1.6.1",
+    "permissions": [
+        "settings_read",
+        "settings_write",
+        "process"
+    ]
+}

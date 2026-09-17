@@ -1,0 +1,248 @@
+{
+    "Profiles": {
+        "Profiles": "プロファイル"
+    },
+    "A profile stores the look of the shell: theme and accent, light or dark, wallpaper, bars, frame, transparency, fonts and desktop widgets. Changes you make later are saved into the active profile.": {
+        "A profile stores the look of the shell: theme and accent, light or dark, wallpaper, bars, frame, transparency, fonts and desktop widgets. Changes you make later are saved into the active profile.": "プロファイルはシェルの見た目を保存します。テーマとアクセントカラー、ライト/ダーク、壁紙、バー、フレーム、透明度、フォント、デスクトップウィジェットが対象です。後から加えた変更はアクティブなプロファイルに保存されます。"
+    },
+    "Name for a new profile from the current look": {
+        "Name for a new profile from the current look": "現在の見た目から作る新しいプロファイルの名前"
+    },
+    "Create": {
+        "Create": "作成"
+    },
+    "No profiles yet.": {
+        "No profiles yet.": "プロファイルはまだありません。"
+    },
+    "No profiles yet. Create one in Settings under Profiles.": {
+        "No profiles yet. Create one in Settings under Profiles.": "プロファイルはまだありません。設定の「プロファイル」で作成できます。"
+    },
+    "active": {
+        "active": "アクティブ"
+    },
+    "active profile": {
+        "active profile": "アクティブなプロファイル"
+    },
+    "Enter or click to apply": {
+        "Enter or click to apply": "Enter またはクリックで適用"
+    },
+    "Apply": {
+        "Apply": "適用"
+    },
+    "Undo changes since the profile was activated": {
+        "Undo changes since the profile was activated": "プロファイルを有効にしてからの変更を元に戻す"
+    },
+    "Rename": {
+        "Rename": "名前を変更"
+    },
+    "Click again to delete": {
+        "Click again to delete": "もう一度クリックで削除"
+    },
+    "Delete": {
+        "Delete": "削除"
+    },
+    "Profile picker": {
+        "Profile picker": "プロファイル選択"
+    },
+    "Open it with a keybind: dms ipc call profiles toggle": {
+        "Open it with a keybind: dms ipc call profiles toggle": "キーバインドで開きます: dms ipc call profiles toggle"
+    },
+    "View": {
+        "View": "表示形式"
+    },
+    "Strip": {
+        "Strip": "ストリップ"
+    },
+    "Free, without a panel": {
+        "Free, without a panel": "フリー（パネルなし）"
+    },
+    "Carousel": {
+        "Carousel": "カルーセル"
+    },
+    "Grid": {
+        "Grid": "グリッド"
+    },
+    "Shape": {
+        "Shape": "形状"
+    },
+    "Portrait": {
+        "Portrait": "縦長"
+    },
+    "Landscape": {
+        "Landscape": "横長"
+    },
+    "Square": {
+        "Square": "正方形"
+    },
+    "Circle": {
+        "Circle": "円"
+    },
+    "Hexagon": {
+        "Hexagon": "六角形"
+    },
+    "Diamond": {
+        "Diamond": "ひし形"
+    },
+    "Glow around the selection": {
+        "Glow around the selection": "選択項目の周りを光らせる"
+    },
+    "Outline around the selection": {
+        "Outline around the selection": "選択項目の枠線"
+    },
+    "Check mark on the active profile": {
+        "Check mark on the active profile": "アクティブなプロファイルにチェックマーク"
+    },
+    "Corner radius like windows": {
+        "Corner radius like windows": "ウィンドウと同じ角丸"
+    },
+    "Uses the window corner radius that DMS sets for the compositor.": {
+        "Uses the window corner radius that DMS sets for the compositor.": "DMS がコンポジターに設定するウィンドウの角丸半径を使います。"
+    },
+    "Corner radius": {
+        "Corner radius": "角丸の半径"
+    },
+    "Transition": {
+        "Transition": "トランジション"
+    },
+    "While switching, the screen is frozen, the profile is applied underneath and then revealed with an animation, so bars, colors and wallpaper change in one step.": {
+        "While switching, the screen is frozen, the profile is applied underneath and then revealed with an animation, so bars, colors and wallpaper change in one step.": "切り替え中は画面を止め、その下でプロファイルを適用してからアニメーションで表示します。バー、色、壁紙が一度に切り替わります。"
+    },
+    "Random": {
+        "Random": "ランダム"
+    },
+    "Fade": {
+        "Fade": "フェード"
+    },
+    "Wipe": {
+        "Wipe": "ワイプ"
+    },
+    "Circle from the center": {
+        "Circle from the center": "中央から広がる円"
+    },
+    "Iris": {
+        "Iris": "アイリス"
+    },
+    "Pixelate": {
+        "Pixelate": "ピクセル化"
+    },
+    "Stripes": {
+        "Stripes": "ストライプ"
+    },
+    "Burn away": {
+        "Burn away": "燃え尽き"
+    },
+    "Zoom": {
+        "Zoom": "ズーム"
+    },
+    "Slide away": {
+        "Slide away": "スライド"
+    },
+    "Doors": {
+        "Doors": "ドア"
+    },
+    "Blinds": {
+        "Blinds": "ブラインド"
+    },
+    "Tiles": {
+        "Tiles": "タイル"
+    },
+    "Wave": {
+        "Wave": "波"
+    },
+    "Clock": {
+        "Clock": "時計"
+    },
+    "Dots": {
+        "Dots": "ドット"
+    },
+    "Swirl": {
+        "Swirl": "渦巻き"
+    },
+    "Ripple": {
+        "Ripple": "波紋"
+    },
+    "Melt": {
+        "Melt": "メルト"
+    },
+    "Blur": {
+        "Blur": "ぼかし"
+    },
+    "Dissolve": {
+        "Dissolve": "ディゾルブ"
+    },
+    "Through black": {
+        "Through black": "黒を経由"
+    },
+    "Shatter": {
+        "Shatter": "破片"
+    },
+    "Hack: data corruption": {
+        "Hack: data corruption": "ハック: データ破損"
+    },
+    "Hack: code rain": {
+        "Hack: code rain": "ハック: コードの雨"
+    },
+    "Hack: signal loss": {
+        "Hack: signal loss": "ハック: 信号ロス"
+    },
+    "Hack: pixel sorting": {
+        "Hack: pixel sorting": "ハック: ピクセルソート"
+    },
+    "Hack: scan": {
+        "Hack: scan": "ハック: スキャン"
+    },
+    "CRT off": {
+        "CRT off": "ブラウン管オフ"
+    },
+    "Off": {
+        "Off": "オフ"
+    },
+    "Type": {
+        "Type": "種類"
+    },
+    "Random picks from": {
+        "Random picks from": "ランダムの対象"
+    },
+    "Duration": {
+        "Duration": "時間"
+    },
+    "Glowing edge": {
+        "Glowing edge": "光るエッジ"
+    },
+    "The edge of the animation glows in the accent color of the new profile.": {
+        "The edge of the animation glows in the accent color of the new profile.": "アニメーションの縁が新しいプロファイルのアクセントカラーで光ります。"
+    },
+    "Preview transition": {
+        "Preview transition": "トランジションを試す"
+    },
+    "Advanced": {
+        "Advanced": "詳細設定"
+    },
+    "Save changes into the active profile": {
+        "Save changes into the active profile": "変更をアクティブなプロファイルに保存"
+    },
+    "Plugins saved with a profile": {
+        "Plugins saved with a profile": "プロファイルと一緒に保存するプラグイン"
+    },
+    "Plugin ids separated by commas, for example audioFx.": {
+        "Plugin ids separated by commas, for example audioFx.": "プラグイン ID をカンマ区切りで指定します (例: audioFx)。"
+    },
+    "Save command": {
+        "Save command": "保存コマンド"
+    },
+    "Optional. Runs when a profile is saved and prints JSON, stored with the profile. For settings outside DMS.": {
+        "Optional. Runs when a profile is saved and prints JSON, stored with the profile. For settings outside DMS.": "任意。プロファイルの保存時に実行され、出力した JSON がプロファイルと一緒に保存されます。DMS の外にある設定向けです。"
+    },
+    "Apply command": {
+        "Apply command": "適用コマンド"
+    },
+    "Optional. Runs after switching, before the screen is revealed. DMS_PROFILE_DIR, DMS_PROFILE_SLUG and DMS_PROFILE_NAME are set.": {
+        "Optional. Runs after switching, before the screen is revealed. DMS_PROFILE_DIR, DMS_PROFILE_SLUG and DMS_PROFILE_NAME are set.": "任意。切り替えの後、画面が表示される前に実行されます。DMS_PROFILE_DIR、DMS_PROFILE_SLUG、DMS_PROFILE_NAME が設定されます。"
+    },
+    "Could not switch profile": {
+        "Could not switch profile": "プロファイルを切り替えられませんでした"
+    },
+    "Snowstorm": {
+        "Snowstorm": "砂嵐"
+    }
+}

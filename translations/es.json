@@ -1,0 +1,248 @@
+{
+    "Profiles": {
+        "Profiles": "Perfiles"
+    },
+    "A profile stores the look of the shell: theme and accent, light or dark, wallpaper, bars, frame, transparency, fonts and desktop widgets. Changes you make later are saved into the active profile.": {
+        "A profile stores the look of the shell: theme and accent, light or dark, wallpaper, bars, frame, transparency, fonts and desktop widgets. Changes you make later are saved into the active profile.": "Un perfil guarda el aspecto del shell: tema y color de acento, modo claro u oscuro, fondo de pantalla, barras, marco, transparencia, fuentes y widgets de escritorio. Los cambios que hagas después se guardan en el perfil activo."
+    },
+    "Name for a new profile from the current look": {
+        "Name for a new profile from the current look": "Nombre para un perfil nuevo con el aspecto actual"
+    },
+    "Create": {
+        "Create": "Crear"
+    },
+    "No profiles yet.": {
+        "No profiles yet.": "Todavía no hay perfiles."
+    },
+    "No profiles yet. Create one in Settings under Profiles.": {
+        "No profiles yet. Create one in Settings under Profiles.": "Todavía no hay perfiles. Crea uno en Ajustes, en Perfiles."
+    },
+    "active": {
+        "active": "activo"
+    },
+    "active profile": {
+        "active profile": "perfil activo"
+    },
+    "Enter or click to apply": {
+        "Enter or click to apply": "Intro o clic para aplicar"
+    },
+    "Apply": {
+        "Apply": "Aplicar"
+    },
+    "Undo changes since the profile was activated": {
+        "Undo changes since the profile was activated": "Deshacer los cambios desde que se activó el perfil"
+    },
+    "Rename": {
+        "Rename": "Renombrar"
+    },
+    "Click again to delete": {
+        "Click again to delete": "Haz clic otra vez para eliminar"
+    },
+    "Delete": {
+        "Delete": "Eliminar"
+    },
+    "Profile picker": {
+        "Profile picker": "Selector de perfiles"
+    },
+    "Open it with a keybind: dms ipc call profiles toggle": {
+        "Open it with a keybind: dms ipc call profiles toggle": "Ábrelo con un atajo de teclado: dms ipc call profiles toggle"
+    },
+    "View": {
+        "View": "Vista"
+    },
+    "Strip": {
+        "Strip": "Fila"
+    },
+    "Free, without a panel": {
+        "Free, without a panel": "Libre, sin panel"
+    },
+    "Carousel": {
+        "Carousel": "Carrusel"
+    },
+    "Grid": {
+        "Grid": "Cuadrícula"
+    },
+    "Shape": {
+        "Shape": "Forma"
+    },
+    "Portrait": {
+        "Portrait": "Vertical"
+    },
+    "Landscape": {
+        "Landscape": "Horizontal"
+    },
+    "Square": {
+        "Square": "Cuadrado"
+    },
+    "Circle": {
+        "Circle": "Círculo"
+    },
+    "Hexagon": {
+        "Hexagon": "Hexágono"
+    },
+    "Diamond": {
+        "Diamond": "Rombo"
+    },
+    "Glow around the selection": {
+        "Glow around the selection": "Brillo alrededor de la selección"
+    },
+    "Outline around the selection": {
+        "Outline around the selection": "Contorno alrededor de la selección"
+    },
+    "Check mark on the active profile": {
+        "Check mark on the active profile": "Marca en el perfil activo"
+    },
+    "Corner radius like windows": {
+        "Corner radius like windows": "Mismo radio que las ventanas"
+    },
+    "Uses the window corner radius that DMS sets for the compositor.": {
+        "Uses the window corner radius that DMS sets for the compositor.": "Usa el radio de las esquinas de las ventanas que DMS configura en el compositor."
+    },
+    "Corner radius": {
+        "Corner radius": "Radio de las esquinas"
+    },
+    "Transition": {
+        "Transition": "Transición"
+    },
+    "While switching, the screen is frozen, the profile is applied underneath and then revealed with an animation, so bars, colors and wallpaper change in one step.": {
+        "While switching, the screen is frozen, the profile is applied underneath and then revealed with an animation, so bars, colors and wallpaper change in one step.": "Durante el cambio, la pantalla se congela, el perfil se aplica por debajo y luego se muestra con una animación. Así las barras, los colores y el fondo cambian de una vez."
+    },
+    "Random": {
+        "Random": "Aleatoria"
+    },
+    "Fade": {
+        "Fade": "Fundido"
+    },
+    "Wipe": {
+        "Wipe": "Barrido"
+    },
+    "Circle from the center": {
+        "Circle from the center": "Círculo desde el centro"
+    },
+    "Iris": {
+        "Iris": "Iris"
+    },
+    "Pixelate": {
+        "Pixelate": "Pixelar"
+    },
+    "Stripes": {
+        "Stripes": "Rayas"
+    },
+    "Burn away": {
+        "Burn away": "Quemar"
+    },
+    "Zoom": {
+        "Zoom": "Zoom"
+    },
+    "Slide away": {
+        "Slide away": "Desplazar"
+    },
+    "Doors": {
+        "Doors": "Puertas"
+    },
+    "Blinds": {
+        "Blinds": "Persianas"
+    },
+    "Tiles": {
+        "Tiles": "Baldosas"
+    },
+    "Wave": {
+        "Wave": "Onda"
+    },
+    "Clock": {
+        "Clock": "Reloj"
+    },
+    "Dots": {
+        "Dots": "Puntos"
+    },
+    "Swirl": {
+        "Swirl": "Remolino"
+    },
+    "Ripple": {
+        "Ripple": "Ondas"
+    },
+    "Melt": {
+        "Melt": "Derretir"
+    },
+    "Blur": {
+        "Blur": "Desenfoque"
+    },
+    "Dissolve": {
+        "Dissolve": "Disolver"
+    },
+    "Through black": {
+        "Through black": "Pasando por negro"
+    },
+    "Shatter": {
+        "Shatter": "Cristal roto"
+    },
+    "Hack: data corruption": {
+        "Hack: data corruption": "Hack: datos corruptos"
+    },
+    "Hack: code rain": {
+        "Hack: code rain": "Hack: lluvia de código"
+    },
+    "Hack: signal loss": {
+        "Hack: signal loss": "Hack: pérdida de señal"
+    },
+    "Hack: pixel sorting": {
+        "Hack: pixel sorting": "Hack: ordenación de píxeles"
+    },
+    "Hack: scan": {
+        "Hack: scan": "Hack: escaneo"
+    },
+    "CRT off": {
+        "CRT off": "Apagado de CRT"
+    },
+    "Off": {
+        "Off": "Desactivado"
+    },
+    "Type": {
+        "Type": "Tipo"
+    },
+    "Random picks from": {
+        "Random picks from": "Aleatoria elige entre"
+    },
+    "Duration": {
+        "Duration": "Duración"
+    },
+    "Glowing edge": {
+        "Glowing edge": "Borde luminoso"
+    },
+    "The edge of the animation glows in the accent color of the new profile.": {
+        "The edge of the animation glows in the accent color of the new profile.": "El borde de la animación brilla con el color de acento del nuevo perfil."
+    },
+    "Preview transition": {
+        "Preview transition": "Probar transición"
+    },
+    "Advanced": {
+        "Advanced": "Avanzado"
+    },
+    "Save changes into the active profile": {
+        "Save changes into the active profile": "Guardar cambios en el perfil activo"
+    },
+    "Plugins saved with a profile": {
+        "Plugins saved with a profile": "Complementos guardados con el perfil"
+    },
+    "Plugin ids separated by commas, for example audioFx.": {
+        "Plugin ids separated by commas, for example audioFx.": "IDs de complementos separados por comas, por ejemplo audioFx."
+    },
+    "Save command": {
+        "Save command": "Comando al guardar"
+    },
+    "Optional. Runs when a profile is saved and prints JSON, stored with the profile. For settings outside DMS.": {
+        "Optional. Runs when a profile is saved and prints JSON, stored with the profile. For settings outside DMS.": "Opcional. Se ejecuta al guardar un perfil e imprime un JSON que se guarda con el perfil. Para ajustes fuera de DMS."
+    },
+    "Apply command": {
+        "Apply command": "Comando al aplicar"
+    },
+    "Optional. Runs after switching, before the screen is revealed. DMS_PROFILE_DIR, DMS_PROFILE_SLUG and DMS_PROFILE_NAME are set.": {
+        "Optional. Runs after switching, before the screen is revealed. DMS_PROFILE_DIR, DMS_PROFILE_SLUG and DMS_PROFILE_NAME are set.": "Opcional. Se ejecuta después del cambio, antes de mostrar la pantalla. Se definen DMS_PROFILE_DIR, DMS_PROFILE_SLUG y DMS_PROFILE_NAME."
+    },
+    "Could not switch profile": {
+        "Could not switch profile": "No se pudo cambiar de perfil"
+    },
+    "Snowstorm": {
+        "Snowstorm": "Nieve"
+    }
+}

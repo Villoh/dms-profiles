@@ -1,0 +1,248 @@
+{
+    "Profiles": {
+        "Profiles": "配置"
+    },
+    "A profile stores the look of the shell: theme and accent, light or dark, wallpaper, bars, frame, transparency, fonts and desktop widgets. Changes you make later are saved into the active profile.": {
+        "A profile stores the look of the shell: theme and accent, light or dark, wallpaper, bars, frame, transparency, fonts and desktop widgets. Changes you make later are saved into the active profile.": "配置会保存 shell 的外观：主题和强调色、浅色或深色、壁纸、状态栏、框架、透明度、字体和桌面部件。之后所做的更改会保存到当前配置。"
+    },
+    "Name for a new profile from the current look": {
+        "Name for a new profile from the current look": "用当前外观新建配置的名称"
+    },
+    "Create": {
+        "Create": "创建"
+    },
+    "No profiles yet.": {
+        "No profiles yet.": "还没有配置。"
+    },
+    "No profiles yet. Create one in Settings under Profiles.": {
+        "No profiles yet. Create one in Settings under Profiles.": "还没有配置。请在设置的“配置”中创建。"
+    },
+    "active": {
+        "active": "当前"
+    },
+    "active profile": {
+        "active profile": "当前配置"
+    },
+    "Enter or click to apply": {
+        "Enter or click to apply": "按 Enter 或点击以应用"
+    },
+    "Apply": {
+        "Apply": "应用"
+    },
+    "Undo changes since the profile was activated": {
+        "Undo changes since the profile was activated": "撤销启用该配置以来的更改"
+    },
+    "Rename": {
+        "Rename": "重命名"
+    },
+    "Click again to delete": {
+        "Click again to delete": "再次点击以删除"
+    },
+    "Delete": {
+        "Delete": "删除"
+    },
+    "Profile picker": {
+        "Profile picker": "配置选择器"
+    },
+    "Open it with a keybind: dms ipc call profiles toggle": {
+        "Open it with a keybind: dms ipc call profiles toggle": "通过快捷键打开：dms ipc call profiles toggle"
+    },
+    "View": {
+        "View": "视图"
+    },
+    "Strip": {
+        "Strip": "条带"
+    },
+    "Free, without a panel": {
+        "Free, without a panel": "自由，无面板"
+    },
+    "Carousel": {
+        "Carousel": "轮播"
+    },
+    "Grid": {
+        "Grid": "网格"
+    },
+    "Shape": {
+        "Shape": "形状"
+    },
+    "Portrait": {
+        "Portrait": "纵向"
+    },
+    "Landscape": {
+        "Landscape": "横向"
+    },
+    "Square": {
+        "Square": "正方形"
+    },
+    "Circle": {
+        "Circle": "圆形"
+    },
+    "Hexagon": {
+        "Hexagon": "六边形"
+    },
+    "Diamond": {
+        "Diamond": "菱形"
+    },
+    "Glow around the selection": {
+        "Glow around the selection": "选中项周围发光"
+    },
+    "Outline around the selection": {
+        "Outline around the selection": "选中项轮廓"
+    },
+    "Check mark on the active profile": {
+        "Check mark on the active profile": "当前配置显示勾选标记"
+    },
+    "Corner radius like windows": {
+        "Corner radius like windows": "与窗口相同的圆角"
+    },
+    "Uses the window corner radius that DMS sets for the compositor.": {
+        "Uses the window corner radius that DMS sets for the compositor.": "使用 DMS 为合成器设置的窗口圆角半径。"
+    },
+    "Corner radius": {
+        "Corner radius": "圆角半径"
+    },
+    "Transition": {
+        "Transition": "过渡动画"
+    },
+    "While switching, the screen is frozen, the profile is applied underneath and then revealed with an animation, so bars, colors and wallpaper change in one step.": {
+        "While switching, the screen is frozen, the profile is applied underneath and then revealed with an animation, so bars, colors and wallpaper change in one step.": "切换时屏幕会先定格，在下方应用配置，再用动画显示出来，因此状态栏、颜色和壁纸会一次性完成切换。"
+    },
+    "Random": {
+        "Random": "随机"
+    },
+    "Fade": {
+        "Fade": "淡入淡出"
+    },
+    "Wipe": {
+        "Wipe": "擦除"
+    },
+    "Circle from the center": {
+        "Circle from the center": "从中心扩散的圆"
+    },
+    "Iris": {
+        "Iris": "光圈"
+    },
+    "Pixelate": {
+        "Pixelate": "像素化"
+    },
+    "Stripes": {
+        "Stripes": "条纹"
+    },
+    "Burn away": {
+        "Burn away": "燃尽"
+    },
+    "Zoom": {
+        "Zoom": "缩放"
+    },
+    "Slide away": {
+        "Slide away": "滑出"
+    },
+    "Doors": {
+        "Doors": "开门"
+    },
+    "Blinds": {
+        "Blinds": "百叶窗"
+    },
+    "Tiles": {
+        "Tiles": "方块"
+    },
+    "Wave": {
+        "Wave": "波浪"
+    },
+    "Clock": {
+        "Clock": "时钟"
+    },
+    "Dots": {
+        "Dots": "圆点"
+    },
+    "Swirl": {
+        "Swirl": "漩涡"
+    },
+    "Ripple": {
+        "Ripple": "涟漪"
+    },
+    "Melt": {
+        "Melt": "融化"
+    },
+    "Blur": {
+        "Blur": "模糊"
+    },
+    "Dissolve": {
+        "Dissolve": "溶解"
+    },
+    "Through black": {
+        "Through black": "经由黑屏"
+    },
+    "Shatter": {
+        "Shatter": "碎裂"
+    },
+    "Hack: data corruption": {
+        "Hack: data corruption": "黑客：数据损坏"
+    },
+    "Hack: code rain": {
+        "Hack: code rain": "黑客：代码雨"
+    },
+    "Hack: signal loss": {
+        "Hack: signal loss": "黑客：信号丢失"
+    },
+    "Hack: pixel sorting": {
+        "Hack: pixel sorting": "黑客：像素排序"
+    },
+    "Hack: scan": {
+        "Hack: scan": "黑客：扫描"
+    },
+    "CRT off": {
+        "CRT off": "显像管关闭"
+    },
+    "Off": {
+        "Off": "关闭"
+    },
+    "Type": {
+        "Type": "类型"
+    },
+    "Random picks from": {
+        "Random picks from": "随机范围"
+    },
+    "Duration": {
+        "Duration": "时长"
+    },
+    "Glowing edge": {
+        "Glowing edge": "发光边缘"
+    },
+    "The edge of the animation glows in the accent color of the new profile.": {
+        "The edge of the animation glows in the accent color of the new profile.": "动画边缘以新配置的强调色发光。"
+    },
+    "Preview transition": {
+        "Preview transition": "预览过渡动画"
+    },
+    "Advanced": {
+        "Advanced": "高级"
+    },
+    "Save changes into the active profile": {
+        "Save changes into the active profile": "将更改保存到当前配置"
+    },
+    "Plugins saved with a profile": {
+        "Plugins saved with a profile": "随配置保存的插件"
+    },
+    "Plugin ids separated by commas, for example audioFx.": {
+        "Plugin ids separated by commas, for example audioFx.": "插件 ID，用逗号分隔，例如 audioFx。"
+    },
+    "Save command": {
+        "Save command": "保存命令"
+    },
+    "Optional. Runs when a profile is saved and prints JSON, stored with the profile. For settings outside DMS.": {
+        "Optional. Runs when a profile is saved and prints JSON, stored with the profile. For settings outside DMS.": "可选。保存配置时运行并输出 JSON，随配置一起保存。用于 DMS 之外的设置。"
+    },
+    "Apply command": {
+        "Apply command": "应用命令"
+    },
+    "Optional. Runs after switching, before the screen is revealed. DMS_PROFILE_DIR, DMS_PROFILE_SLUG and DMS_PROFILE_NAME are set.": {
+        "Optional. Runs after switching, before the screen is revealed. DMS_PROFILE_DIR, DMS_PROFILE_SLUG and DMS_PROFILE_NAME are set.": "可选。在切换之后、屏幕显示之前运行。会设置 DMS_PROFILE_DIR、DMS_PROFILE_SLUG 和 DMS_PROFILE_NAME。"
+    },
+    "Could not switch profile": {
+        "Could not switch profile": "无法切换配置"
+    },
+    "Snowstorm": {
+        "Snowstorm": "雪花屏"
+    }
+}
