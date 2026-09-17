@@ -884,7 +884,10 @@ PluginComponent {
             if (allowed.indexOf(key) < 0)
                 return "unknown key, allowed: " + allowed.join(", ");
             let v = value;
-            if (key === "transitionPool" || key === "profilePlugins")
+            // transitionPool is a list in the settings page; profilePlugins is a
+            // comma separated string there, and a list here would leave the text
+            // field unable to show it.
+            if (key === "transitionPool")
                 v = value.split(",").map(s => s.trim()).filter(s => s.length > 0);
             else if (value === "true" || value === "false")
                 v = value === "true";

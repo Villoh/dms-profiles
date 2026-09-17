@@ -29,13 +29,28 @@ PluginSettings {
         }, 0, 15000);
     }
 
+    // The daemon may still be starting when the page opens, and then the call
+    // comes back empty. Without a second attempt the page stays empty for as
+    // long as it is open, which reads like "there are no profiles".
+    property int tries: 0
+
     function refresh() {
         root.ipc(["list"], (out, code) => {
-            if (code !== 0)
+            let liste = null;
+            if (code === 0) {
+                try {
+                    liste = JSON.parse(out);
+                } catch (e) {}
+            }
+            if (liste === null) {
+                if (root.tries < 6) {
+                    root.tries++;
+                    refreshTimer.restart();
+                }
                 return;
-            try {
-                root.profiles = JSON.parse(out);
-            } catch (e) {}
+            }
+            root.tries = 0;
+            root.profiles = liste;
         });
     }
 
