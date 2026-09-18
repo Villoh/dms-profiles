@@ -19,6 +19,11 @@ import qs.Common
 Item {
     id: store
 
+    // Keeps thumb.jpg (1280 px wide) next to each profile's wallpaper: made once,
+    // again when the wallpaper is newer. vipsthumbnail, else ImageMagick, else
+    // none (the picker then loads the full wallpaper). Prints ##thumb if present;
+    // not @@@, the listing is split at newline + @@@.
+    readonly property string thumbScript: "w=; for f in \"$d\"wallpaper.*; do [ -f \"$f\" ] && { w=\"$f\"; break; }; done; t=\"${d}thumb.jpg\"; " + "if [ -n \"$w\" ] && { [ ! -f \"$t\" ] || [ \"$w\" -nt \"$t\" ]; }; then " + "if command -v vipsthumbnail >/dev/null; then vipsthumbnail \"$w\" -s 1280 -o \"$t[Q=85]\" >/dev/null 2>&1; " + "elif command -v magick >/dev/null; then magick \"$w\" -resize 1280x \"$t\" 2>/dev/null; fi; fi; " + "[ -f \"$t\" ] && printf '\\n##thumb'; "
     readonly property string root: Paths.strip(StandardPaths.writableLocation(StandardPaths.ConfigLocation)) + "/DankMaterialShell/profiles"
 
     property var profiles: []
@@ -67,7 +72,7 @@ Item {
 
     // ------------------------------------------------------------------ reading
     function refresh(callback) {
-        const script = "mkdir -p " + store.quote(store.root) + "; " + "cat " + store.quote(store.root + "/state.json") + " 2>/dev/null; " + "for d in " + store.quote(store.root) + "/*/; do [ -f \"$d/profile.json\" ] || continue; " + "printf '\\n@@@%s\\n' \"$(basename \"$d\")\"; cat \"$d/profile.json\"; " + "if cmp -s \"$d/profile.json\" \"$d/.start/profile.json\" 2>/dev/null; then echo '@@@same'; fi; done";
+        const script = "mkdir -p " + store.quote(store.root) + "; " + "cat " + store.quote(store.root + "/state.json") + " 2>/dev/null; " + "for d in " + store.quote(store.root) + "/*/; do [ -f \"$d/profile.json\" ] || continue; " + "printf '\\n@@@%s\\n' \"$(basename \"$d\")\"; cat \"$d/profile.json\"; " + store.thumbScript + "if cmp -s \"$d/profile.json\" \"$d/.start/profile.json\" 2>/dev/null; then echo '@@@same'; fi; done";
         store.sh(script, (out, code) => {
             const parts = String(out).split("\n@@@");
             let state = {};
@@ -82,6 +87,9 @@ Item {
                 const same = body.trim().endsWith("@@@same");
                 if (same)
                     body = body.substring(0, body.lastIndexOf("@@@same"));
+                const hasThumb = body.trim().endsWith("##thumb");
+                if (hasThumb)
+                    body = body.substring(0, body.lastIndexOf("##thumb"));
                 let p;
                 try {
                     p = JSON.parse(body);
@@ -93,7 +101,9 @@ Item {
                     "slug": slug,
                     "name": p.name || slug,
                     "wallpaper": wall,
-                    "thumb": wall,
+                    // small preview for the picker; the full wallpaper takes
+                    // noticeably longer to load (about 6 MB PNG per profile)
+                    "thumb": hasThumb ? store.dir(slug) + "/thumb.jpg" : wall,
                     "created": p.created || "",
                     "updated": p.updated || "",
                     "active": slug === state.active,
