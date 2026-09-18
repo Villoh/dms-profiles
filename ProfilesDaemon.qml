@@ -65,6 +65,9 @@ PluginComponent {
     // Bar keys that stay out of a profile: identity and monitor assignment.
     // `enabled` stays out on purpose, a profile without a bar would be hard to undo.
     readonly property var barSkipKeys: ["id", "name", "enabled", "screenPreferences", "showOnLastDisplay"]
+    // Stored next to the bar values: whether the bar is on in this profile. Only
+    // applied to extra bars; the first bar and islands always stay on.
+    readonly property string barActiveKey: "_profileActive"
 
     // In connected frame mode DMS zeroes these bar values and keeps the originals
     // in connectedFrameBarStyleBackups. That sync does not run on a reload from
@@ -124,6 +127,8 @@ PluginComponent {
                 if (root.barSkipKeys.indexOf(k) < 0)
                     o[k] = root.clone(b[k]);
             }
+            // Extra bars belong to the profile, on or off; see mergeSettings()
+            o[root.barActiveKey] = b.enabled !== false;
             bars[b.id] = o;
         }
         const plugins = {};
@@ -274,12 +279,19 @@ PluginComponent {
         for (const k in want)
             current[k] = want[k];
         const bars = dms.bars || {};
-        for (const bar of (current.barConfigs || [])) {
+        const all = current.barConfigs || [];
+        for (let i = 0; i < all.length; i++) {
+            const bar = all[i];
             const upd = bars[bar.id] || {};
             for (const k in upd) {
-                if (root.barSkipKeys.indexOf(k) < 0)
+                if (root.barSkipKeys.indexOf(k) < 0 && k !== root.barActiveKey)
                     bar[k] = upd[k];
             }
+            // Extra bars follow the profile: on as saved, off when the profile
+            // does not know them. Older profiles saved a bar without the flag,
+            // that counts as on. The first bar and islands are never switched off.
+            if (i > 0 && bar.island !== true)
+                bar.enabled = bars[bar.id] ? upd[root.barActiveKey] !== false : false;
         }
         if (!root.connected(current)) {
             current.connectedFrameBarStyleBackups = {};
