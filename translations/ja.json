@@ -244,5 +244,11 @@
     },
     "Snowstorm": {
         "Snowstorm": "砂嵐"
+    },
+    "Shown in the profile picker": {
+        "Shown in the profile picker": "プロファイル選択に表示"
+    },
+    "Hidden from the profile picker": {
+        "Hidden from the profile picker": "プロファイル選択で非表示"
     }
 }

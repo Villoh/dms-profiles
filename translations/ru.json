@@ -244,5 +244,11 @@
     },
     "Snowstorm": {
         "Snowstorm": "Снег на экране"
+    },
+    "Shown in the profile picker": {
+        "Shown in the profile picker": "Показан в выборе профилей"
+    },
+    "Hidden from the profile picker": {
+        "Hidden from the profile picker": "Скрыт в выборе профилей"
     }
 }

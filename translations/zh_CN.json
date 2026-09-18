@@ -244,5 +244,11 @@
     },
     "Snowstorm": {
         "Snowstorm": "雪花屏"
+    },
+    "Shown in the profile picker": {
+        "Shown in the profile picker": "在配置文件选择器中显示"
+    },
+    "Hidden from the profile picker": {
+        "Hidden from the profile picker": "在配置文件选择器中隐藏"
     }
 }

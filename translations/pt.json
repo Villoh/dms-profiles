@@ -244,5 +244,11 @@
     },
     "Snowstorm": {
         "Snowstorm": "Chuvisco"
+    },
+    "Shown in the profile picker": {
+        "Shown in the profile picker": "Visível no seletor de perfis"
+    },
+    "Hidden from the profile picker": {
+        "Hidden from the profile picker": "Oculto no seletor de perfis"
     }
 }

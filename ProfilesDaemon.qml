@@ -660,7 +660,8 @@ PluginComponent {
     property int selected: 0
     property int gridColumns: 1
 
-    readonly property var profiles: store.profiles
+    // The picker leaves out hidden profiles, but always shows the active one
+    readonly property var profiles: store.profiles.filter(p => p.shown !== false || p.active)
     readonly property string pickerView: {
         root._settings;
         return cfg("pickerView", "strip");
@@ -671,14 +672,14 @@ PluginComponent {
     }
 
     function choose(index) {
-        if (index < 0 || index >= store.profiles.length)
+        if (index < 0 || index >= root.profiles.length)
             return;
-        root.apply(store.profiles[index].slug);
+        root.apply(root.profiles[index].slug);
     }
 
     function showPicker() {
-        store.refresh(list => {
-            const active = list.findIndex(x => x.active);
+        store.refresh(() => {
+            const active = root.profiles.findIndex(x => x.active);
             root.selected = active >= 0 ? active : 0;
         });
         picker.visible = true;
@@ -721,7 +722,7 @@ PluginComponent {
                         accumulated -= 120;
                     }
                     while (accumulated <= -120) {
-                        root.selected = Math.min(store.profiles.length - 1, root.selected + 1);
+                        root.selected = Math.min(root.profiles.length - 1, root.selected + 1);
                         accumulated += 120;
                     }
                 }
@@ -734,7 +735,7 @@ PluginComponent {
             focus: true
 
             Keys.onPressed: event => {
-                const last = store.profiles.length - 1;
+                const last = root.profiles.length - 1;
                 const grid = root.pickerView === "grid";
                 if (event.key === Qt.Key_Escape) {
                     root.hidePicker();
@@ -815,6 +816,14 @@ PluginComponent {
 
         function list(): string {
             return JSON.stringify(store.profiles);
+        }
+
+        // dms ipc call profiles show SLUG true|false  -- in the picker or not
+        function show(slug: string, on: string): string {
+            if (!store.find(slug))
+                return "no profile " + slug;
+            store.setShown(slug, on !== "false");
+            return slug + (on !== "false" ? " shown" : " hidden");
         }
 
         function refresh(): string {

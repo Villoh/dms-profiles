@@ -214,6 +214,12 @@ PluginSettings {
                             onClicked: root.ipc(["reset", row.modelData.slug], () => root.later())
                         }
                         DankActionButton {
+                            iconName: row.modelData.shown === false ? "visibility_off" : "visibility"
+                            tooltipText: row.modelData.shown === false ? I18n.trFor("dmsProfiles", "Hidden from the profile picker") : I18n.trFor("dmsProfiles", "Shown in the profile picker")
+                            opacity: row.modelData.shown === false ? 0.5 : 1
+                            onClicked: root.ipc(["show", row.modelData.slug, row.modelData.shown === false ? "true" : "false"], () => root.later())
+                        }
+                        DankActionButton {
                             iconName: "arrow_upward"
                             enabled: row.index > 0
                             opacity: enabled ? 1 : 0.3

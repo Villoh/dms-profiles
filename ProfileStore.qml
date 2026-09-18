@@ -22,6 +22,8 @@ Item {
     readonly property string root: Paths.strip(StandardPaths.writableLocation(StandardPaths.ConfigLocation)) + "/DankMaterialShell/profiles"
 
     property var profiles: []
+    // Slugs left out of the picker and the dashboard tab (still in Settings)
+    property var hidden: []
     property string activeSlug: ""
     property var order: []
     property bool loaded: false
@@ -95,6 +97,7 @@ Item {
                     "created": p.created || "",
                     "updated": p.updated || "",
                     "active": slug === state.active,
+                    "shown": !(Array.isArray(state.hidden) && state.hidden.indexOf(slug) >= 0),
                     "resettable": !same
                 });
             }
@@ -112,9 +115,11 @@ Item {
             if (active && store.activeSlug !== active)
                 store.writeJson(store.root + "/state.json", {
                     "active": "",
-                    "order": list.map(p => p.slug)
+                    "order": list.map(p => p.slug),
+                    "hidden": Array.isArray(state.hidden) ? state.hidden : []
                 }, null);
             store.order = saved;
+            store.hidden = (Array.isArray(state.hidden) ? state.hidden : []).filter(s => list.some(p => p.slug === s));
             store.profiles = list;
             store.loaded = true;
             store.changed();
@@ -148,8 +153,16 @@ Item {
     function writeState(callback) {
         store.writeJson(store.root + "/state.json", {
             "active": store.activeSlug,
-            "order": store.profiles.map(p => p.slug)
+            "order": store.profiles.map(p => p.slug),
+            "hidden": store.hidden
         }, callback);
+    }
+
+    // Show or hide a profile in the picker; it stays in Settings either way
+    function setShown(slug, shown, callback) {
+        const rest = store.hidden.filter(s => s !== slug);
+        store.hidden = shown ? rest : rest.concat([slug]);
+        store.writeState(() => store.refresh(callback));
     }
 
     function setActive(slug, callback) {

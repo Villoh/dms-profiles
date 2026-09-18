@@ -244,5 +244,11 @@
     },
     "Snowstorm": {
         "Snowstorm": "Schneesturm"
+    },
+    "Shown in the profile picker": {
+        "Shown in the profile picker": "In der Profilauswahl sichtbar"
+    },
+    "Hidden from the profile picker": {
+        "Hidden from the profile picker": "In der Profilauswahl ausgeblendet"
     }
 }
