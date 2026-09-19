@@ -250,5 +250,17 @@
     },
     "Hidden from the profile picker": {
         "Hidden from the profile picker": "Nascosto nel selettore dei profili"
+    },
+    "profile file unreadable": {
+        "profile file unreadable": "file del profilo illeggibile"
+    },
+    "settings.json unreadable": {
+        "settings.json unreadable": "settings.json illeggibile"
+    },
+    "could not write settings.json": {
+        "could not write settings.json": "impossibile scrivere settings.json"
+    },
+    "DMS did not load the profile values": {
+        "DMS did not load the profile values": "DMS non ha caricato i valori del profilo"
     }
 }

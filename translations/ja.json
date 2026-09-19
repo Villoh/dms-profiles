@@ -250,5 +250,17 @@
     },
     "Hidden from the profile picker": {
         "Hidden from the profile picker": "プロファイル選択で非表示"
+    },
+    "profile file unreadable": {
+        "profile file unreadable": "プロファイルファイルを読み込めません"
+    },
+    "settings.json unreadable": {
+        "settings.json unreadable": "settings.json を読み込めません"
+    },
+    "could not write settings.json": {
+        "could not write settings.json": "settings.json を書き込めませんでした"
+    },
+    "DMS did not load the profile values": {
+        "DMS did not load the profile values": "DMS がプロファイルの値を読み込みませんでした"
     }
 }

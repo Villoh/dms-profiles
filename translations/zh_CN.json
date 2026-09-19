@@ -250,5 +250,17 @@
     },
     "Hidden from the profile picker": {
         "Hidden from the profile picker": "在配置文件选择器中隐藏"
+    },
+    "profile file unreadable": {
+        "profile file unreadable": "无法读取配置文件"
+    },
+    "settings.json unreadable": {
+        "settings.json unreadable": "无法读取 settings.json"
+    },
+    "could not write settings.json": {
+        "could not write settings.json": "无法写入 settings.json"
+    },
+    "DMS did not load the profile values": {
+        "DMS did not load the profile values": "DMS 未加载配置值"
     }
 }

@@ -741,7 +741,7 @@ PluginComponent {
         root.switching = false;
         root.endCover();
         root.switched(root.pendingSlug, false);
-        ToastService.showError(I18n.trFor("dmsProfiles", "Could not switch profile"), message);
+        ToastService.showError(I18n.trFor("dmsProfiles", "Could not switch profile"), I18n.trFor("dmsProfiles", message));
     }
 
     function reset(slug) {
