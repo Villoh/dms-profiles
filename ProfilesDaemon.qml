@@ -276,8 +276,11 @@ PluginComponent {
         const oldBackups = current.connectedFrameBarStyleBackups || {};
         const wasConnected = root.connected(current);
         const want = dms.settings || {};
+        const oldInstances = current.desktopWidgetInstances;
         for (const k in want)
             current[k] = want[k];
+        if (Array.isArray(want.desktopWidgetInstances) && Array.isArray(oldInstances))
+            current.desktopWidgetInstances = root.mergeWidgetInstances(oldInstances, want.desktopWidgetInstances);
         const bars = dms.bars || {};
         const all = current.barConfigs || [];
         for (let i = 0; i < all.length; i++) {
@@ -318,6 +321,34 @@ PluginComponent {
             }
         }
         return current;
+    }
+
+    // Widgets the profile does not know stay in the list, switched off, and the
+    // current order is kept. DMS rebuilds every desktop widget as soon as the
+    // set of instances or their order changes (DesktopWidgetLayer
+    // orderSignature); switching on and off only shows and hides. With the
+    // whole list replaced, a switch between profiles with different widgets
+    // blocked the shell for up to 1.7 s (measured 19.09.2026).
+    function mergeWidgetInstances(current, wanted) {
+        const byId = {};
+        for (const w of wanted)
+            byId[w.id] = w;
+        const result = [];
+        for (const inst of current) {
+            if (byId[inst.id]) {
+                result.push(byId[inst.id]);
+                delete byId[inst.id];
+            } else {
+                const off = root.clone(inst);
+                off.enabled = false;
+                result.push(off);
+            }
+        }
+        for (const w of wanted) {
+            if (byId[w.id])
+                result.push(w);
+        }
+        return result;
     }
 
     function settingsLoaded(dms) {
@@ -387,7 +418,7 @@ PluginComponent {
 
         if (wallpaper && wallpaper !== SessionData.wallpaperPath) {
             // Under the frozen screen the DMS wallpaper transition is invisible and only adds waiting time
-            if (transition.state === "covered" && SessionData.wallpaperTransition !== "none") {
+            if (transition.state !== "idle" && SessionData.wallpaperTransition !== "none") {
                 restoreWallpaperTransition.value = SessionData.wallpaperTransition;
                 SessionData.wallpaperTransition = "none";
                 restoreWallpaperTransition.restart();
@@ -467,13 +498,19 @@ PluginComponent {
             root.switching = true;
             root.startedAt = Date.now();
             root.timings = {};
+            root.colorsDone = false;
+            root.commandDone = false;
+            root.appliedAt = 0;
             root.pendingSlug = slug;
             root.pendingProfile = p;
             root.lastError = "";
             const want = p.dms.settings || {};
             const wantLight = p.dms.session ? p.dms.session.isLightMode === true : false;
             root.pendingSameColors = store.stable(SettingsData.registryThemeVariants) === store.stable(want.registryThemeVariants) && SettingsData.currentThemeName === want.currentThemeName && SessionData.isLightMode === wantLight;
-            if (transition.cover(false) === "started")
+            // Two-phase: the animation runs onto the new wallpaper right away
+            // and does not wait for the profile (see ProfileTransition.qml)
+            const wall = p.wallpaper ? store.dir(slug) + "/" + p.wallpaper : "";
+            if (transition.cover(false, wall) === "started")
                 coverWait.restart();
             else
                 root.stepWrite();
@@ -483,15 +520,18 @@ PluginComponent {
 
     Timer {
         id: coverWait
-        interval: 30
+        interval: 10
         repeat: true
         property int ticks: 0
         onRunningChanged: if (running) ticks = 0
         onTriggered: {
             ticks++;
-            if (transition.state === "covered" || transition.state === "idle" || ticks > 100) {
+            // two-phase: the animation may already run or even be done
+            if (transition.state !== "capturing" || ticks > 300) {
                 stop();
                 root.mark("covered");
+                if (transition.twoPhase && transition.state === "covered")
+                    transition.reveal("");
                 root.stepWrite();
             }
         }
@@ -510,15 +550,58 @@ PluginComponent {
         const merged = root.mergeSettings(current, root.pendingProfile.dms);
         root.pendingText = JSON.stringify(merged, null, 2) + "\n";
         root.loadRetries = 0;
+        root.mark("merged");
+        root.startEarlyColors(root.pendingProfile.dms);
         root.writeSettingsText(root.pendingText, ok => {
+            root.mark("written");
             if (!ok) {
                 root.fail("could not write settings.json");
                 return;
             }
+            // The apply command only needs the written file and waits for the
+            // colors itself; starting it here instead of after DMS reloaded saved
+            // up to 0.3 s per switch (19.09.2026).
+            root.commandDone = false;
+            root.startCommand();
             loadWait.restart();
         });
     }
     property string pendingText: ""
+
+    // Colors first: matugen needs the theme values only, not the whole
+    // settings.json. Set them directly (DMS does not save on a plain property
+    // change) and start the generation, so it runs while DMS reloads the
+    // settings instead of after. Only when nothing else feeds into the colors
+    // changes; otherwise the switch waits for DMS as before.
+    property bool earlyColors: false
+    property bool earlyColorsDone: false
+    readonly property var earlyColorBlockers: ["customThemeFile", "matugenScheme", "matugenContrast", "matugenSourceMode", "matugenSmartMode", "terminalsAlwaysDark", "runUserMatugenTemplates"]
+    function startEarlyColors(dms) {
+        root.earlyColors = false;
+        root.earlyColorsDone = false;
+        if (root.pendingSameColors)
+            return;
+        const want = dms.settings || {};
+        const wantLight = dms.session ? dms.session.isLightMode === true : false;
+        if (wantLight !== SessionData.isLightMode)
+            return;
+        for (const k of root.earlyColorBlockers) {
+            if (want[k] !== undefined && store.stable(want[k]) !== store.stable(SettingsData[k]))
+                return;
+        }
+        if (want.registryThemeVariants !== undefined)
+            SettingsData.registryThemeVariants = root.clone(want.registryThemeVariants);
+        if (want.currentThemeCategory !== undefined)
+            SettingsData.currentThemeCategory = want.currentThemeCategory;
+        if (want.currentThemeName !== undefined && want.currentThemeName !== SettingsData.currentThemeName)
+            SettingsData.currentThemeName = want.currentThemeName;
+        root.earlyColors = true;
+        SettingsData.applyStoredTheme();
+        if (typeof Theme.reloadCustomThemeVariant === "function")
+            Theme.reloadCustomThemeVariant();
+        Theme.generateSystemThemesFromCurrentTheme();
+        root.mark("early");
+    }
 
     Timer {
         id: loadWait
@@ -549,12 +632,12 @@ PluginComponent {
         const p = root.pendingProfile;
         const wall = p.wallpaper ? store.dir(root.pendingSlug) + "/" + p.wallpaper : "";
         root.applyProfile(p, wall);
+        root.mark("applied");
         root.appliedAt = Date.now();
         root.colorsDone = false;
-        root.commandDone = false;
-        root.startCommand();
         colorsWait.fired = false;
-        colorsWait.interval = root.pendingSameColors ? 1200 : 20000;
+        // the early generation already delivered the new colors
+        colorsWait.interval = root.earlyColorsDone ? 40 : (root.pendingSameColors ? 1200 : 20000);
         colorsWait.restart();
     }
 
@@ -563,10 +646,16 @@ PluginComponent {
         watchChanges: true
         printErrors: false
         onFileChanged: {
+            if (root.switching && root.timings.colorsFile === undefined)
+                root.mark("colorsFile");
+            if (root.earlyColors && !root.earlyColorsDone && root.switching) {
+                root.earlyColorsDone = true;
+                root.mark("colorsEarly");
+            }
             if (colorsWait.running && !colorsWait.fired) {
                 // matugen writes several files one after another
                 colorsWait.fired = true;
-                colorsWait.interval = 150;
+                colorsWait.interval = 40;
                 colorsWait.restart();
             }
         }
@@ -602,13 +691,23 @@ PluginComponent {
         }, 0, 15000);
     }
 
+    // two-phase: fade the overlay out (after the animation, if it still runs);
+    // otherwise the classic reveal of the live screen
+    function endCover() {
+        if (transition.twoPhase)
+            transition.uncover();
+        else
+            transition.reveal("");
+    }
+
     function maybeReveal() {
-        if (root.colorsDone && root.commandDone && !revealDelay.running && root.switching)
+        // appliedAt: the profile must be applied in THIS switch, the command can finish before that
+        if (root.colorsDone && root.commandDone && root.appliedAt >= root.startedAt && !revealDelay.running && root.switching)
             root.stepReveal();
     }
 
     function stepReveal() {
-        const rest = 450 - (Date.now() - root.appliedAt);
+        const rest = 250 - (Date.now() - root.appliedAt);
         revealDelay.interval = Math.max(1, rest);
         revealDelay.restart();
     }
@@ -617,7 +716,7 @@ PluginComponent {
         id: revealDelay
         onTriggered: {
             root.mark("revealed");
-            transition.reveal("");
+            root.endCover();
             const slug = root.pendingSlug;
             store.setActive(slug, () => store.writeStart(slug, () => {
                     root.pausedByError = false;
@@ -639,7 +738,7 @@ PluginComponent {
         root.lastError = message;
         root.pausedByError = true;
         root.switching = false;
-        transition.reveal("");
+        root.endCover();
         root.switched(root.pendingSlug, false);
         ToastService.showError(I18n.trFor("dmsProfiles", "Could not switch profile"), message);
     }

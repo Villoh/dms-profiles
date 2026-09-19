@@ -10,6 +10,11 @@
 // kinds that move, distort or remove the OLD frame are possible. No cube, no
 // sliding in of the new frame.
 //
+// twoPhase = 1: the animation does not wait for the new profile. It runs from
+// the old frame onto the new WALLPAPER (newFrame, already cropped to the
+// screen) and ends opaque on it; the shell rebuilds underneath and is faded in
+// afterwards through qt_Opacity.
+//
 //  0 fade      1 wipe       2 disc       3 iris       4 pixel
 //  5 stripes   6 ember      7 zoom       8 slide      9 doors
 // 10 blinds   11 squares   12 wave      13 clock     14 dots
@@ -34,9 +39,11 @@ layout(std140, binding = 0) uniform buf {
     float glow;         // 0 no edge glow, 1 full
     float preview;      // 1: old frame desaturated (trying out without a switch)
     vec4 edgeColor;
+    float twoPhase;     // 1: new wallpaper under the old frame instead of the live screen
 } ubuf;
 
 layout(binding = 1) uniform sampler2D oldFrame;
+layout(binding = 2) uniform sampler2D newFrame;
 
 const float PI = 3.14159265;
 
@@ -551,5 +558,10 @@ void main() {
     vec3 edgeTone = crt ? vec3(1.0) : ubuf.edgeColor.rgb;
     vec3 light = edgeTone * edge * 0.85 + vec3(1.0, 0.95, 0.85) * pow(min(edge, 1.5), 4.0) * 0.25;
 
+    if (ubuf.twoPhase > 0.5) {
+        vec3 wall = texture(newFrame, uv).rgb;
+        fragColor = vec4(col * a + light + wall * (1.0 - a), 1.0) * ubuf.qt_Opacity;
+        return;
+    }
     fragColor = vec4(col * a + light, a) * ubuf.qt_Opacity;
 }
