@@ -6,9 +6,9 @@
 // alpha = how much of the old frame is still shown. Optionally the accent color
 // of the new profile glows along the edges (additive).
 //
-// The new frame is not available as a texture (it is live underneath), so only
-// kinds that move, distort or remove the OLD frame are possible. No cube, no
-// sliding in of the new frame.
+// Without twoPhase the new frame is not available as a texture (it is live
+// underneath), so the kinds can only move, distort or remove the old frame.
+// A cube or a new frame sliding in is not possible.
 //
 // twoPhase = 1: the animation does not wait for the new profile. It runs from
 // the old frame onto the new WALLPAPER (newFrame, already cropped to the
@@ -312,8 +312,8 @@ void main() {
         float t = smoothstep(0.08, 1.0, p);
         // Shards fall up to 2.6 cells down and drift at most 0.8 sideways, so
         // the search is 3 wide and 4 deep upwards. Longer paths need a larger
-        // search; with unbounded drift the search found no shard after half
-        // the animation and the frame simply vanished.
+        // search; with unbounded drift the search misses the shards in the
+        // second half of the animation and the frame disappears at once.
         for (int j = -3; j <= 1; j++) {
             for (int i = -1; i <= 1; i++) {
                 vec2 cell = base + vec2(float(i), float(j));

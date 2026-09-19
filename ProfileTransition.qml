@@ -1,23 +1,23 @@
 // Profiles: animated transition on profile switch.
 //
-// Wallpaper managers only cross-fade the wallpaper. A profile switch rebuilds
-// everything: bar, frame, colors, widgets, wallpaper. Without a transition that
-// visibly jumps piece by piece. So:
+// A profile switch rebuilds bar, frame, colors, widgets and wallpaper, one
+// after another. The overlay hides these steps:
 //
-//   1. cover(): capture the WHOLE screen per output and show it on an overlay
+//   1. cover(): capture the whole screen per output and show it on an overlay
 //      surface above everything.
 //   2. The profile is applied underneath.
-//   3. reveal(): shaders/transition.frag removes the old frame, the new
-//      profile underneath is live.
+//   3. reveal(): shaders/transition.frag removes the old frame and shows the
+//      live profile underneath.
 //
-// Two-phase mode (a wallpaper is given to cover()): the animation does not wait
-// for the new profile. It runs from the old frame onto the new wallpaper right
-// away and ends opaque on it ("wallpaper"). The profile is applied meanwhile;
-// uncover() then fades the whole overlay out, so bars, frame, windows and
-// widgets appear over the same wallpaper. Only the capture freezes the screen.
+// Two-phase mode (cover() gets a wallpaper): the animation does not wait for
+// the new profile. It runs from the old frame onto the new wallpaper right
+// away and ends opaque on it (state "wallpaper"). The profile is applied
+// meanwhile; uncover() then fades the whole overlay out, so bars, frame,
+// windows and widgets appear over the same wallpaper. Only the capture holds
+// the screen still.
 //
-// The overlay takes no input. A safety timer reveals after 12 s at the latest
-// in case applying hangs or fails, so the screen never stays frozen.
+// The overlay takes no input. If applying hangs or fails, a safety timer
+// removes it after 12 s at the latest.
 //
 // state: idle -> capturing -> covered -> revealing -> idle
 // two-phase: idle -> capturing -> covered -> revealing -> wallpaper -> uncovering -> idle
@@ -66,9 +66,9 @@ Scope {
 
     property string state: "idle"
     // The animation runs on the scene graph render thread (UniformAnimator,
-    // OpacityAnimator in each overlay). A NumberAnimation on the GUI thread
-    // stalled whenever DMS rebuilt the shell underneath, which in two-phase
-    // mode is exactly while the animation runs (blocks of 0.1 to 0.5 s).
+    // OpacityAnimator in each overlay). An animation on the GUI thread stalls
+    // while DMS rebuilds the shell underneath, which in two-phase mode happens
+    // during the animation (blocks of 0.1 to 0.5 s).
     property bool animRunning: false
     property bool animDone: false
     property int animDuration: 1200
@@ -88,10 +88,10 @@ Scope {
     readonly property bool twoPhase: newWallpaper !== ""
     property bool uncoverWanted: false
     readonly property int uncoverDuration: 380
-    // The shell fades in during the last part of the animation already (the
-    // old frame is nearly gone by then); must stay below uncoverDuration so
-    // the fade ends after the animation. Tried a plain fade after the end
-    // instead (19.09.2026): the overlap looked better.
+    // The shell starts to fade in during the last part of the animation, when
+    // the old frame is nearly gone. Overlapping looks calmer than a fade that
+    // starts after the end. Must stay below uncoverDuration so the fade ends
+    // after the animation.
     readonly property int uncoverOverlap: Math.min(300, Math.round(root.animDuration * 0.25))
 
     function cover(isPreview, wallpaper) {
@@ -195,9 +195,9 @@ Scope {
         }
         if (root.state === "revealing") {
             root.uncoverWanted = true;
-            // Queue the fade on the render thread right behind the animation:
-            // started from animationFinished() it came 0.18 s late, because the
-            // GUI thread was still busy with the rebuild (measured 19.09.2026)
+            // Queue the fade on the render thread right behind the animation.
+            // Started from animationFinished() it comes about 0.2 s late while
+            // the GUI thread is still busy with the rebuild.
             if (root.animRunning && !root.fadeScheduled) {
                 root.fadeScheduled = true;
                 root.runUncover(Math.max(0, root.animDuration - root.uncoverOverlap - (Date.now() - root.animStartedAt)));
@@ -271,8 +271,8 @@ Scope {
 
             screen: overlay.modelData
             // The capture runs as a separate process, not as ScreencopyView.
-            // ScreencopyView inside the DMS process crashed Qt Wayland whenever
-            // other windows mapped or unmapped while a capture source was set.
+            // ScreencopyView inside the DMS process crashes Qt Wayland when
+            // other windows map or unmap while a capture source is set.
             property bool loaded: false
             readonly property string outputName: overlay.modelData?.name ?? "0"
             readonly property string captureDir: Quickshell.env("XDG_RUNTIME_DIR") || "/tmp"
@@ -355,7 +355,7 @@ Scope {
 
             // Screen size, not the window size: the window only gets its size
             // when it maps, and a changed sourceSize loads the image a second
-            // time (cost 0.25 s of frozen screen, measured 19.09.2026)
+            // time, which holds the screen about 0.25 s longer.
             readonly property int screenW: overlay.modelData?.width ?? 1920
             readonly property int screenH: overlay.modelData?.height ?? 1080
 

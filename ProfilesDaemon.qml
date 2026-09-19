@@ -3,8 +3,8 @@
 // saved under a name and switched with a picker or IPC.
 //
 // Switching writes all settings to settings.json in one go and lets DMS reload
-// the file. Setting the values one by one through SettingsData.set wrote the
-// file once per key; DMS read intermediate states back and lost values.
+// the file. Setting the values one by one through SettingsData.set writes the
+// file once per key; DMS then reads intermediate states back and loses values.
 
 pragma ComponentBehavior: Bound
 
@@ -87,8 +87,9 @@ PluginComponent {
     }
     // Optional shell commands for things outside DMS (terminal colors, compositor
     // extras). The save command prints JSON that is stored as `extras`. The apply
-    // command starts as soon as DMS has loaded the new settings, while the colors
-    // are generated; the screen is revealed when both are done. It gets
+    // command starts as soon as the new settings.json is written, while DMS
+    // reloads it and the colors are generated; the new desktop is shown when
+    // both are done. It gets
     // DMS_PROFILE_DIR, DMS_PROFILE_SLUG, DMS_PROFILE_NAME and
     // DMS_PROFILE_NEW_COLORS (1 if new colors are being generated, else 0).
     readonly property string saveCommand: {
@@ -326,9 +327,9 @@ PluginComponent {
     // Widgets the profile does not know stay in the list, switched off, and the
     // current order is kept. DMS rebuilds every desktop widget as soon as the
     // set of instances or their order changes (DesktopWidgetLayer
-    // orderSignature); switching on and off only shows and hides. With the
-    // whole list replaced, a switch between profiles with different widgets
-    // blocked the shell for up to 1.7 s (measured 19.09.2026).
+    // orderSignature); switching on and off only shows and hides. Replacing
+    // the whole list blocks the shell for up to 1.7 s when the two profiles
+    // have different widgets.
     function mergeWidgetInstances(current, wanted) {
         const byId = {};
         for (const w of wanted)
@@ -417,7 +418,7 @@ PluginComponent {
         lightGuard.restart();
 
         if (wallpaper && wallpaper !== SessionData.wallpaperPath) {
-            // Under the frozen screen the DMS wallpaper transition is invisible and only adds waiting time
+            // Under the overlay the DMS wallpaper transition is not visible and only adds waiting time
             if (transition.state !== "idle" && SessionData.wallpaperTransition !== "none") {
                 restoreWallpaperTransition.value = SessionData.wallpaperTransition;
                 SessionData.wallpaperTransition = "none";
@@ -559,8 +560,8 @@ PluginComponent {
                 return;
             }
             // The apply command only needs the written file and waits for the
-            // colors itself; starting it here instead of after DMS reloaded saved
-            // up to 0.3 s per switch (19.09.2026).
+            // colors itself, so it starts here and not after DMS has reloaded
+            // (up to 0.3 s less per switch).
             root.commandDone = false;
             root.startCommand();
             loadWait.restart();
@@ -572,7 +573,7 @@ PluginComponent {
     // settings.json. Set them directly (DMS does not save on a plain property
     // change) and start the generation, so it runs while DMS reloads the
     // settings instead of after. Only when nothing else feeds into the colors
-    // changes; otherwise the switch waits for DMS as before.
+    // changes; otherwise the colors are generated after DMS has reloaded.
     property bool earlyColors: false
     property bool earlyColorsDone: false
     readonly property var earlyColorBlockers: ["customThemeFile", "matugenScheme", "matugenContrast", "matugenSourceMode", "matugenSmartMode", "terminalsAlwaysDark", "runUserMatugenTemplates"]

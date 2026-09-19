@@ -10,7 +10,9 @@
 
 ## 切り替え
 
-キーバインドで選択画面を開き、プロファイルを選びます。切り替え中は画面が1秒ほど止まり、その下でプロファイルが適用されてから、古い画面がアニメーションで消えます。バー、色、壁紙が順番にではなく、一度に切り替わります。
+キーバインドで選択画面を開き、プロファイルを選びます。画面をキャプチャする間だけ、画面が一瞬（約 0.2 秒）止まります。その後すぐに、古い画面から新しいプロファイルの壁紙へトランジションが始まります。その間に DMS がプロファイルを適用し、準備ができるとバー、フレーム、ウィンドウ、ウィジェットが新しい壁紙の上にフェードインします。シェルが少しずつ組み替わる様子は見えません。
+
+独自の壁紙を持たないプロファイルでは、以前の流れになります。キャプチャした画面はプロファイルの適用が終わるまで残り、その後トランジションで完成したデスクトップが現れます。トランジションの長さは設定で変えられます（初期値 1.2 秒）。
 
 トランジションは29種類あり、フェード、ワイプ、円、ドア、ブラインド、メルト、破片、ブラウン管オフ、砂嵐、5種類のハック効果などから選べます。ランダムは好きなものだけに絞れます。ほとんどのアニメーションでは、縁が新しいプロファイルのアクセントカラーで光ります。
 
@@ -35,7 +37,7 @@ DMS の設定で行った変更は、数秒後にアクティブなプロファ�
 ターミナルの色、ブラウザーのテーマ、コンポジターのルールなど、DMS が管理しないものは、2つの任意のコマンドで扱えます。
 
 - 保存コマンドはプロファイルの保存時に実行されます。出力した JSON は `extras` としてプロファイルに保存されます。
-- 適用コマンドは切り替え中、DMS が新しい設定を読み込んだ時点で実行されます。コマンドが終わると画面が表示されます。`DMS_PROFILE_DIR`、`DMS_PROFILE_SLUG`、`DMS_PROFILE_NAME`、`DMS_PROFILE_NEW_COLORS`（新しい色を生成している場合は 1）が渡されます。プロファイルのファイルは `$DMS_PROFILE_DIR/profile.json` です。
+- 適用コマンドは切り替え中、新しい設定が書き込まれた直後に実行されます。新しいデスクトップはコマンドが終わってから表示されます。`DMS_PROFILE_DIR`、`DMS_PROFILE_SLUG`、`DMS_PROFILE_NAME`、`DMS_PROFILE_NEW_COLORS`（新しい色を生成している場合は 1）が渡されます。プロファイルのファイルは `$DMS_PROFILE_DIR/profile.json` です。
 
 GTK のインターフェースフォントをプロファイルごとに保持する小さな例です。
 
@@ -50,12 +52,21 @@ gsettings set org.gnome.desktop.interface font-name \
 
 ## 必要なもの
 
-DankMaterialShell 1.6.1 以降。トランジションには DMS に付属する `dms screenshot` を使います。私は niri でこのプラグインを使っています。ウィンドウの間隔、角丸の半径、ボーダーの幅は DMS 自身がコンポジターの設定に書き込むので、DMS が対応している他のコンポジターでもプロファイルに合わせて変わるはずです。
+DankMaterialShell 1.6.1 以降。トランジション用の画面キャプチャには、`grim` がインストールされていればそれを、なければ DMS に付属する `dms screenshot` を使います。私は niri でこのプラグインを使っています。ウィンドウの間隔、角丸の半径、ボーダーの幅は DMS 自身がコンポジターの設定に書き込むので、DMS が対応している他のコンポジターでもプロファイルに合わせて変わるはずです。
 
 ## インストール
 
+プラグインレジストリから:
+
 ```sh
-git clone https://github.com/21Rebel/dms-profiles ~/.config/DankMaterialShell/plugins/DmsProfiles
+dms plugins install dmsProfiles
+dms ipc call plugins enable dmsProfiles
+```
+
+DMS の 設定 → プラグイン → ブラウズ からも入手できます。リポジトリから直接入れる場合:
+
+```sh
+git clone https://github.com/satoshoe-dev/dms-profiles ~/.config/DankMaterialShell/plugins/DmsProfiles
 dms ipc call plugins enable dmsProfiles
 ```
 
@@ -91,4 +102,4 @@ dms ipc call profiles status
 
 ## ライセンス
 
-MIT
+[MIT](LICENSE)

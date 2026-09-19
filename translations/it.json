@@ -104,8 +104,8 @@
     "Transition": {
         "Transition": "Transizione"
     },
-    "While switching, the screen is frozen, the profile is applied underneath and then revealed with an animation, so bars, colors and wallpaper change in one step.": {
-        "While switching, the screen is frozen, the profile is applied underneath and then revealed with an animation, so bars, colors and wallpaper change in one step.": "Durante il cambio lo schermo viene congelato, il profilo viene applicato sotto e poi mostrato con un'animazione, così barre, colori e sfondo cambiano in un solo passaggio."
+    "While switching, the screen stands still for a moment and the animation runs onto the wallpaper of the new profile. Bars, windows and widgets then fade in with the new look.": {
+        "While switching, the screen stands still for a moment and the animation runs onto the wallpaper of the new profile. Bars, windows and widgets then fade in with the new look.": "Durante il cambio lo schermo si ferma per un attimo e l'animazione passa allo sfondo del nuovo profilo. Poi barre, finestre e widget compaiono in dissolvenza con il nuovo aspetto."
     },
     "Random": {
         "Random": "Casuale"
@@ -236,8 +236,8 @@
     "Apply command": {
         "Apply command": "Comando di applicazione"
     },
-    "Optional. Runs after switching, before the screen is revealed. DMS_PROFILE_DIR, DMS_PROFILE_SLUG and DMS_PROFILE_NAME are set.": {
-        "Optional. Runs after switching, before the screen is revealed. DMS_PROFILE_DIR, DMS_PROFILE_SLUG and DMS_PROFILE_NAME are set.": "Facoltativo. Viene eseguito dopo il cambio, prima che lo schermo venga mostrato. DMS_PROFILE_DIR, DMS_PROFILE_SLUG e DMS_PROFILE_NAME sono impostate."
+    "Optional. Runs while switching, before the new desktop is shown. DMS_PROFILE_DIR, DMS_PROFILE_SLUG and DMS_PROFILE_NAME are set.": {
+        "Optional. Runs while switching, before the new desktop is shown. DMS_PROFILE_DIR, DMS_PROFILE_SLUG and DMS_PROFILE_NAME are set.": "Facoltativo. Viene eseguito durante il cambio, prima che compaia il nuovo desktop. DMS_PROFILE_DIR, DMS_PROFILE_SLUG e DMS_PROFILE_NAME sono impostate."
     },
     "Could not switch profile": {
         "Could not switch profile": "Impossibile cambiare profilo"

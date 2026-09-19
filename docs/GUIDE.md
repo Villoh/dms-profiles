@@ -4,8 +4,16 @@
 
 ## 1. Install and enable the plugin
 
+From the plugin registry:
+
 ```sh
-git clone https://github.com/21Rebel/dms-profiles ~/.config/DankMaterialShell/plugins/DmsProfiles
+dms plugins install dmsProfiles
+```
+
+It is also listed in DMS under Settings → Plugins → Browse. Or clone the repository into your DMS plugin folder:
+
+```sh
+git clone https://github.com/satoshoe-dev/dms-profiles ~/.config/DankMaterialShell/plugins/DmsProfiles
 ```
 
 Open Settings → Plugins and switch Profiles on.
@@ -40,7 +48,7 @@ Press the keybind, choose a profile with the mouse wheel or the arrow keys and p
 
 ![The picker as a carousel](images/03-picker-carousel.png)
 
-The screen freezes for about a second, the profile is applied underneath and then revealed with an animation.
+The screen stands still for a moment while it is captured. Then the transition runs onto the wallpaper of the new profile, and bars, frame, windows and widgets fade in once DMS has applied the profile. If a profile has no wallpaper of its own, the transition reveals the finished desktop instead.
 
 ![A transition in progress](images/04-transition.png)
 
@@ -54,7 +62,7 @@ Under "Profile picker" choose the view (strip, free, carousel or grid) and the s
 
 ## 7. Choose the transition
 
-Under "Transition" pick a type or leave it on "Random". With Random, click the types you want to allow. "Preview transition" plays the animation once without switching, with the old picture shown in gray.
+Under "Transition" pick a type or leave it on "Random". With Random, click the types you want to allow. "Duration" sets how long the animation runs, 1200 ms by default. "Preview transition" plays the animation once without switching, with the old picture shown in gray.
 
 ![Transition settings](images/07-transition-settings.png)
 

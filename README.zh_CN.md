@@ -10,7 +10,9 @@
 
 ## 切换
 
-用快捷键打开配置选择器，然后选择一个配置。切换时屏幕会定格大约一秒，在下方应用配置，然后旧画面以动画方式移除。状态栏、颜色和壁纸一次性完成切换，而不是一个接一个地变化。
+用快捷键打开配置选择器，然后选择一个配置。截取屏幕时，画面会短暂定格（约 0.2 秒）。随后过渡动画立即从旧画面过渡到新配置的壁纸。与此同时 DMS 应用配置，完成后状态栏、框架、窗口和部件会在新壁纸上淡入。你不会看到 shell 一块一块地重建。
+
+没有自己壁纸的配置使用以前的流程：截取的画面一直保留到配置应用完毕，然后过渡动画显现出已完成的桌面。过渡动画的时长可以在设置中调整（默认 1.2 秒）。
 
 共有 29 种过渡动画可选，包括淡入淡出、擦除、圆形、开门、百叶窗、融化、碎裂、显像管关闭、雪花屏和五种黑客效果。随机模式可以只在你喜欢的那些里挑选。大多数动画的边缘会以新配置的强调色发光。
 
@@ -35,7 +37,7 @@
 DMS 不管理的终端颜色、浏览器主题或合成器规则，可以用两个可选命令来处理：
 
 - 保存命令在保存配置时运行。它输出的 JSON 会作为 `extras` 存入配置。
-- 应用命令在切换过程中运行，时间点是 DMS 刚加载完新设置。命令结束后屏幕才会显示。它会收到 `DMS_PROFILE_DIR`、`DMS_PROFILE_SLUG`、`DMS_PROFILE_NAME` 和 `DMS_PROFILE_NEW_COLORS`（正在生成新颜色时为 1）。配置文件是 `$DMS_PROFILE_DIR/profile.json`。
+- 应用命令在切换过程中运行，时间点是新设置刚写入之后。命令结束后新桌面才会显示。它会收到 `DMS_PROFILE_DIR`、`DMS_PROFILE_SLUG`、`DMS_PROFILE_NAME` 和 `DMS_PROFILE_NEW_COLORS`（正在生成新颜色时为 1）。配置文件是 `$DMS_PROFILE_DIR/profile.json`。
 
 一个按配置保存 GTK 界面字体的小例子：
 
@@ -50,12 +52,21 @@ gsettings set org.gnome.desktop.interface font-name \
 
 ## 要求
 
-DankMaterialShell 1.6.1 或更新版本。过渡动画使用 DMS 自带的 `dms screenshot`。我在 niri 上使用这个插件。窗口间距、圆角半径和边框宽度由 DMS 自己写入合成器配置，所以在 DMS 支持的其他合成器上，它们也应该会跟随配置变化。
+DankMaterialShell 1.6.1 或更新版本。过渡动画截取屏幕时，如果安装了 `grim` 就用它，否则用 DMS 自带的 `dms screenshot`。我在 niri 上使用这个插件。窗口间距、圆角半径和边框宽度由 DMS 自己写入合成器配置，所以在 DMS 支持的其他合成器上，它们也应该会跟随配置变化。
 
 ## 安装
 
+从插件注册表安装：
+
 ```sh
-git clone https://github.com/21Rebel/dms-profiles ~/.config/DankMaterialShell/plugins/DmsProfiles
+dms plugins install dmsProfiles
+dms ipc call plugins enable dmsProfiles
+```
+
+也可以在 DMS 的 设置 → 插件 → 浏览 中找到它。若要从仓库安装：
+
+```sh
+git clone https://github.com/satoshoe-dev/dms-profiles ~/.config/DankMaterialShell/plugins/DmsProfiles
 dms ipc call plugins enable dmsProfiles
 ```
 
@@ -91,4 +102,4 @@ dms ipc call profiles status
 
 ## 许可证
 
-MIT
+[MIT](LICENSE)

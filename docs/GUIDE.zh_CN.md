@@ -4,8 +4,16 @@
 
 ## 1. 安装并启用插件
 
+从插件注册表安装：
+
 ```sh
-git clone https://github.com/21Rebel/dms-profiles ~/.config/DankMaterialShell/plugins/DmsProfiles
+dms plugins install dmsProfiles
+```
+
+也可以在 DMS 的 设置 → 插件 → 浏览 中找到它。或者将仓库克隆到 DMS 插件目录：
+
+```sh
+git clone https://github.com/satoshoe-dev/dms-profiles ~/.config/DankMaterialShell/plugins/DmsProfiles
 ```
 
 打开 设置 → 插件，启用 Profiles。
@@ -40,7 +48,7 @@ binds {
 
 ![轮播视图的选择器](images/03-picker-carousel.png)
 
-屏幕会定格约一秒，配置在下方应用，然后通过动画显现出来。
+截取屏幕时画面会短暂定格。随后过渡动画切到新配置的壁纸，DMS 应用完配置后，状态栏、框架、窗口和部件淡入。如果配置没有自己的壁纸，过渡动画会改为显现已完成的桌面。
 
 ![正在进行的过渡](images/04-transition.png)
 
@@ -54,7 +62,7 @@ binds {
 
 ## 7. 选择过渡动画
 
-在“过渡动画”中选择一种类型，或保持“随机”。选择随机时，点击你想允许的类型。“预览过渡动画”会在不切换的情况下播放一次动画，旧画面以灰色显示。
+在“过渡动画”中选择一种类型，或保持“随机”。选择随机时，点击你想允许的类型。“时长”决定动画持续多久，默认 1200 毫秒。“预览过渡动画”会在不切换的情况下播放一次动画，旧画面以灰色显示。
 
 ![过渡动画设置](images/07-transition-settings.png)
 

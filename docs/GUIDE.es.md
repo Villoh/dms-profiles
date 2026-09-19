@@ -4,8 +4,16 @@
 
 ## 1. Instala y activa el complemento
 
+Desde el registro de complementos:
+
 ```sh
-git clone https://github.com/21Rebel/dms-profiles ~/.config/DankMaterialShell/plugins/DmsProfiles
+dms plugins install dmsProfiles
+```
+
+También aparece en DMS en Ajustes → Complementos → Explorar. O clona el repositorio en tu carpeta de complementos de DMS:
+
+```sh
+git clone https://github.com/satoshoe-dev/dms-profiles ~/.config/DankMaterialShell/plugins/DmsProfiles
 ```
 
 Abre Ajustes → Complementos y activa Profiles.
@@ -40,7 +48,7 @@ Pulsa el atajo, elige un perfil con la rueda del ratón o las teclas de flecha y
 
 ![El selector como carrusel](images/03-picker-carousel.png)
 
-La pantalla se congela durante un segundo aproximadamente, el perfil se aplica por debajo y luego se muestra con una animación.
+La pantalla se detiene un momento mientras se captura. Luego la transición pasa al fondo de pantalla del nuevo perfil, y las barras, el marco, las ventanas y los widgets aparecen con un fundido en cuanto DMS ha aplicado el perfil. Si un perfil no tiene fondo propio, la transición descubre en su lugar el escritorio ya listo.
 
 ![Una transición en curso](images/04-transition.png)
 
@@ -54,7 +62,7 @@ En «Selector de perfiles», elige la vista (fila, libre, carrusel o cuadrícula
 
 ## 7. Elige la transición
 
-En «Transición», elige un tipo o déjala en «Aleatoria». Con Aleatoria, haz clic en los tipos que quieras permitir. «Probar transición» reproduce la animación una vez sin cambiar de perfil y muestra la imagen anterior en gris.
+En «Transición», elige un tipo o déjala en «Aleatoria». Con Aleatoria, haz clic en los tipos que quieras permitir. «Duración» fija cuánto dura la animación, 1200 ms por defecto. «Probar transición» reproduce la animación una vez sin cambiar de perfil y muestra la imagen anterior en gris.
 
 ![Ajustes de la transición](images/07-transition-settings.png)
 

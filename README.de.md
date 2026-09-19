@@ -10,7 +10,9 @@ Schritt für Schritt mit Bildern: [Anleitung zu Installation und Einrichtung](do
 
 ## Wechseln
 
-Die Profilauswahl öffnet sich per Tastenkombination, dort wählt man ein Profil. Während des Wechsels ist der Bildschirm etwa eine Sekunde lang eingefroren, darunter wird das Profil angewendet, und dann verschwindet das alte Bild mit einer Animation. Leisten, Farben und Hintergrundbild wechseln in einem Zug statt nacheinander.
+Die Profilauswahl öffnet sich per Tastenkombination, dort wählt man ein Profil. Der Bildschirm wird kurz festgehalten (etwa 0,2 s), solange er aufgenommen wird. Dann läuft der Übergang sofort vom alten Bild auf das Hintergrundbild des neuen Profils. Währenddessen wendet DMS das Profil an, und sobald es fertig ist, blenden Leisten, Rahmen, Fenster und Widgets über dem neuen Hintergrund ein. Dass sich die Shell Stück für Stück umbaut, sieht man nicht.
+
+Profile ohne eigenes Hintergrundbild nutzen den bisherigen Ablauf: Das aufgenommene Bild bleibt stehen, bis das Profil angewendet ist, und der Übergang deckt dann den fertigen Desktop auf. Die Dauer des Übergangs lässt sich in den Einstellungen festlegen (Standard 1,2 s).
 
 Zur Wahl stehen 29 Übergänge, darunter Überblenden, Wischen, Kreis, Türen, Jalousie, Schmelzen, Splitter, eine abschaltende Bildröhre, ein Schneesturm und fünf Hack-Effekte. Zufällig lässt sich auf die Übergänge beschränken, die einem gefallen. Bei den meisten Animationen leuchtet die Kante in der Akzentfarbe des neuen Profils.
 
@@ -35,7 +37,7 @@ Auch Plugin-Einstellungen können zu einem Profil gehören. Dazu die Plugin-IDs 
 Terminalfarben, Browser-Themes oder Compositor-Regeln, um die sich DMS nicht kümmert, lassen sich mit zwei optionalen Befehlen abdecken:
 
 - Der Befehl beim Speichern läuft, wenn ein Profil gespeichert wird. Das JSON, das er ausgibt, landet im Profil unter `extras`.
-- Der Befehl beim Anwenden läuft während des Wechsels, sobald DMS die neuen Einstellungen geladen hat. Der Bildschirm wird erst aufgedeckt, wenn er fertig ist. Er bekommt `DMS_PROFILE_DIR`, `DMS_PROFILE_SLUG`, `DMS_PROFILE_NAME` und `DMS_PROFILE_NEW_COLORS` (1, wenn neue Farben erzeugt werden). Die Profildatei ist `$DMS_PROFILE_DIR/profile.json`.
+- Der Befehl beim Anwenden läuft während des Wechsels, direkt nachdem die neuen Einstellungen geschrieben sind. Der neue Desktop erscheint erst, wenn er fertig ist. Er bekommt `DMS_PROFILE_DIR`, `DMS_PROFILE_SLUG`, `DMS_PROFILE_NAME` und `DMS_PROFILE_NEW_COLORS` (1, wenn neue Farben erzeugt werden). Die Profildatei ist `$DMS_PROFILE_DIR/profile.json`.
 
 Ein kleines Beispiel, das die GTK-Oberflächenschrift je Profil festhält:
 
@@ -50,12 +52,21 @@ gsettings set org.gnome.desktop.interface font-name \
 
 ## Voraussetzungen
 
-DankMaterialShell 1.6.1 oder neuer. Der Übergang nutzt `dms screenshot`, das bei DMS dabei ist. Ich nutze das Plugin unter niri. Fensterabstände, Eckenradius und Rahmenbreite schreibt DMS selbst in die Compositor-Konfiguration, daher sollten sie auch auf anderen von DMS unterstützten Compositors dem Profil folgen.
+DankMaterialShell 1.6.1 oder neuer. Für den Übergang wird der Bildschirm mit `grim` aufgenommen, wenn es installiert ist, sonst mit `dms screenshot`, das bei DMS dabei ist. Ich nutze das Plugin unter niri. Fensterabstände, Eckenradius und Rahmenbreite schreibt DMS selbst in die Compositor-Konfiguration, daher sollten sie auch auf anderen von DMS unterstützten Compositors dem Profil folgen.
 
 ## Installation
 
+Aus der Plugin-Registry:
+
 ```sh
-git clone https://github.com/21Rebel/dms-profiles ~/.config/DankMaterialShell/plugins/DmsProfiles
+dms plugins install dmsProfiles
+dms ipc call plugins enable dmsProfiles
+```
+
+Das Plugin steht auch in DMS unter Einstellungen → Plugins → Durchsuchen. Oder direkt aus dem Repository:
+
+```sh
+git clone https://github.com/satoshoe-dev/dms-profiles ~/.config/DankMaterialShell/plugins/DmsProfiles
 dms ipc call plugins enable dmsProfiles
 ```
 
@@ -91,4 +102,4 @@ Ich habe dieses Plugin mit Hilfe von Claude (Anthropic) geschrieben und nutze es
 
 ## Lizenz
 
-MIT
+[MIT](LICENSE)

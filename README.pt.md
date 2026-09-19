@@ -10,7 +10,9 @@ Passo a passo com imagens: [guia de instalação e configuração](docs/GUIDE.pt
 
 ## Troca de perfil
 
-Abra o seletor com um atalho de teclado e escolha um perfil. Durante a troca, a tela fica congelada por cerca de um segundo, o perfil é aplicado por baixo e a imagem antiga sai com uma animação. Barras, cores e papel de parede mudam de uma vez, e não um depois do outro.
+Abra o seletor com um atalho de teclado e escolha um perfil. A tela para por um instante (cerca de 0,2 s) enquanto é capturada. Depois a transição passa na hora da imagem antiga para o papel de parede do novo perfil. Enquanto isso o DMS aplica o perfil, e quando ele fica pronto, barras, moldura, janelas e widgets aparecem aos poucos sobre o novo fundo. Você não vê o shell mudando parte por parte.
+
+Perfis sem papel de parede próprio usam a sequência anterior: a imagem capturada fica na tela até o perfil ser aplicado, e então a transição revela a área de trabalho já pronta. A duração da transição pode ser ajustada nas configurações (1,2 s por padrão).
 
 Há 29 transições para escolher, entre elas esmaecer, cortina, círculo, portas, persianas, derreter, estilhaços, um CRT desligando, chuvisco e cinco efeitos de hack. A opção Aleatória pode ser limitada às que você preferir. Na maioria das animações, a borda brilha na cor de destaque do novo perfil.
 
@@ -35,7 +37,7 @@ As configurações de plugins também podem fazer parte de um perfil. Informe os
 Cores do terminal, temas do navegador ou regras do compositor que o DMS não gerencia podem ser tratados com dois comandos opcionais:
 
 - O comando ao salvar roda quando um perfil é salvo. O JSON que ele imprimir fica guardado no perfil como `extras`.
-- O comando ao aplicar roda durante a troca, assim que o DMS carrega as novas configurações. A tela é revelada quando ele termina. Ele recebe `DMS_PROFILE_DIR`, `DMS_PROFILE_SLUG`, `DMS_PROFILE_NAME` e `DMS_PROFILE_NEW_COLORS` (1 se novas cores estiverem sendo geradas). O arquivo do perfil é `$DMS_PROFILE_DIR/profile.json`.
+- O comando ao aplicar roda durante a troca, logo depois que as novas configurações são gravadas. A nova área de trabalho só aparece quando ele termina. Ele recebe `DMS_PROFILE_DIR`, `DMS_PROFILE_SLUG`, `DMS_PROFILE_NAME` e `DMS_PROFILE_NEW_COLORS` (1 se novas cores estiverem sendo geradas). O arquivo do perfil é `$DMS_PROFILE_DIR/profile.json`.
 
 Um pequeno exemplo que guarda a fonte da interface GTK por perfil:
 
@@ -50,12 +52,21 @@ gsettings set org.gnome.desktop.interface font-name \
 
 ## Requisitos
 
-DankMaterialShell 1.6.1 ou mais recente. A transição usa `dms screenshot`, que já vem com o DMS. Eu uso o plugin no niri. Espaçamento entre janelas, arredondamento dos cantos e largura da borda são gravados pelo próprio DMS na configuração do compositor, então devem acompanhar o perfil também em outros compositores suportados pelo DMS.
+DankMaterialShell 1.6.1 ou mais recente. Para a transição, a tela é capturada com `grim` se ele estiver instalado, senão com `dms screenshot`, que já vem com o DMS. Eu uso o plugin no niri. Espaçamento entre janelas, arredondamento dos cantos e largura da borda são gravados pelo próprio DMS na configuração do compositor, então devem acompanhar o perfil também em outros compositores suportados pelo DMS.
 
 ## Instalação
 
+Pelo registro de plugins:
+
 ```sh
-git clone https://github.com/21Rebel/dms-profiles ~/.config/DankMaterialShell/plugins/DmsProfiles
+dms plugins install dmsProfiles
+dms ipc call plugins enable dmsProfiles
+```
+
+Ele também aparece no DMS em Configurações → Plugins → Navegar. Para instalar a partir do repositório:
+
+```sh
+git clone https://github.com/satoshoe-dev/dms-profiles ~/.config/DankMaterialShell/plugins/DmsProfiles
 dms ipc call plugins enable dmsProfiles
 ```
 
@@ -91,4 +102,4 @@ Escrevi este plugin com a ajuda do Claude (Anthropic) e o uso todos os dias no m
 
 ## Licença
 
-MIT
+[MIT](LICENSE)

@@ -4,8 +4,16 @@
 
 ## 1. Plugin installieren und einschalten
 
+Aus der Plugin-Registry:
+
 ```sh
-git clone https://github.com/21Rebel/dms-profiles ~/.config/DankMaterialShell/plugins/DmsProfiles
+dms plugins install dmsProfiles
+```
+
+Das Plugin steht auch in DMS unter Einstellungen → Plugins → Durchsuchen. Oder klone das Repository in deinen DMS-Plugin-Ordner:
+
+```sh
+git clone https://github.com/satoshoe-dev/dms-profiles ~/.config/DankMaterialShell/plugins/DmsProfiles
 ```
 
 Öffne Einstellungen → Plugins und schalte Profiles ein.
@@ -40,7 +48,7 @@ Drücke die Tastenkombination, wähle mit dem Mausrad oder den Pfeiltasten ein P
 
 ![Die Auswahl als Karussell](images/03-picker-carousel.png)
 
-Der Bildschirm steht etwa eine Sekunde still, darunter wird das Profil angewendet und dann mit einer Animation aufgedeckt.
+Der Bildschirm steht kurz still, solange er aufgenommen wird. Dann läuft der Übergang auf das Hintergrundbild des neuen Profils, und Leisten, Rahmen, Fenster und Widgets blenden ein, sobald DMS das Profil angewendet hat. Hat ein Profil kein eigenes Hintergrundbild, deckt der Übergang stattdessen den fertigen Desktop auf.
 
 ![Ein Übergang läuft](images/04-transition.png)
 
@@ -54,7 +62,7 @@ Wähle unter „Profilauswahl“ die Ansicht (Leiste, frei, Karussell oder Kache
 
 ## 7. Übergang wählen
 
-Wähle unter „Übergang beim Wechsel“ eine Art oder lass ihn auf „Zufällig“. Bei Zufällig klickst du die Arten an, die erlaubt sein sollen. „Ausprobieren“ spielt die Animation einmal ab, ohne zu wechseln, und zeigt das alte Bild dabei grau.
+Wähle unter „Übergang beim Wechsel“ eine Art oder lass ihn auf „Zufällig“. Bei Zufällig klickst du die Arten an, die erlaubt sein sollen. „Dauer“ legt fest, wie lange die Animation läuft, Standard sind 1200 ms. „Ausprobieren“ spielt die Animation einmal ab, ohne zu wechseln, und zeigt das alte Bild dabei grau.
 
 ![Einstellungen für den Übergang](images/07-transition-settings.png)
 

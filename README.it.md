@@ -10,7 +10,9 @@ Passo per passo con immagini: [guida all'installazione e alla configurazione](do
 
 ## Cambio di profilo
 
-Apri il selettore con una scorciatoia da tastiera e scegli un profilo. Durante il cambio lo schermo resta congelato per circa un secondo, il profilo viene applicato sotto e poi l'immagine precedente sparisce con un'animazione. Barre, colori e sfondo cambiano in un solo passaggio invece che uno dopo l'altro.
+Apri il selettore con una scorciatoia da tastiera e scegli un profilo. Lo schermo si ferma per un attimo (circa 0,2 s) mentre viene catturato. Poi la transizione passa subito dall'immagine precedente allo sfondo del nuovo profilo. Nel frattempo DMS applica il profilo, e quando è pronto barre, cornice, finestre e widget compaiono in dissolvenza sopra il nuovo sfondo. Non si vede la shell cambiare pezzo per pezzo.
+
+I profili senza uno sfondo proprio usano la sequenza precedente: l'immagine catturata resta finché il profilo è applicato, poi la transizione scopre il desktop già pronto. La durata della transizione si imposta nelle impostazioni (1,2 s di default).
 
 Puoi scegliere fra 29 transizioni, tra cui dissolvenza, tendina, cerchio, porte, veneziane, scioglimento, frantumi, un CRT che si spegne, neve e cinque effetti hack. La modalità Casuale si può limitare a quelle che preferisci. Nella maggior parte delle animazioni il bordo si illumina con il colore d'accento del nuovo profilo.
 
@@ -35,7 +37,7 @@ Anche le impostazioni dei plugin possono far parte di un profilo. Inserisci gli 
 Colori del terminale, temi del browser o regole del compositor che DMS non gestisce si possono coprire con due comandi facoltativi:
 
 - Il comando di salvataggio viene eseguito quando si salva un profilo. Il JSON che stampa viene memorizzato nel profilo come `extras`.
-- Il comando di applicazione viene eseguito durante il cambio, appena DMS ha caricato le nuove impostazioni. Lo schermo viene mostrato quando ha finito. Riceve `DMS_PROFILE_DIR`, `DMS_PROFILE_SLUG`, `DMS_PROFILE_NAME` e `DMS_PROFILE_NEW_COLORS` (1 se vengono generati nuovi colori). Il file del profilo è `$DMS_PROFILE_DIR/profile.json`.
+- Il comando di applicazione viene eseguito durante il cambio, subito dopo la scrittura delle nuove impostazioni. Il nuovo desktop compare solo quando ha finito. Riceve `DMS_PROFILE_DIR`, `DMS_PROFILE_SLUG`, `DMS_PROFILE_NAME` e `DMS_PROFILE_NEW_COLORS` (1 se vengono generati nuovi colori). Il file del profilo è `$DMS_PROFILE_DIR/profile.json`.
 
 Un piccolo esempio che conserva il carattere dell'interfaccia GTK per ogni profilo:
 
@@ -50,12 +52,21 @@ gsettings set org.gnome.desktop.interface font-name \
 
 ## Requisiti
 
-DankMaterialShell 1.6.1 o successivo. La transizione usa `dms screenshot`, incluso in DMS. Io uso il plugin su niri. Spaziatura delle finestre, raggio degli angoli e spessore del bordo vengono scritti da DMS stesso nella configurazione del compositor, quindi dovrebbero seguire il profilo anche sugli altri compositor supportati da DMS.
+DankMaterialShell 1.6.1 o successivo. Per la transizione lo schermo viene catturato con `grim`, se installato, altrimenti con `dms screenshot`, incluso in DMS. Io uso il plugin su niri. Spaziatura delle finestre, raggio degli angoli e spessore del bordo vengono scritti da DMS stesso nella configurazione del compositor, quindi dovrebbero seguire il profilo anche sugli altri compositor supportati da DMS.
 
 ## Installazione
 
+Dal registro dei plugin:
+
 ```sh
-git clone https://github.com/21Rebel/dms-profiles ~/.config/DankMaterialShell/plugins/DmsProfiles
+dms plugins install dmsProfiles
+dms ipc call plugins enable dmsProfiles
+```
+
+Si trova anche in DMS in Impostazioni → Plugin → Sfoglia. Per installarlo dal repository:
+
+```sh
+git clone https://github.com/satoshoe-dev/dms-profiles ~/.config/DankMaterialShell/plugins/DmsProfiles
 dms ipc call plugins enable dmsProfiles
 ```
 
@@ -91,4 +102,4 @@ Ho scritto questo plugin con l'aiuto di Claude (Anthropic) e lo uso ogni giorno 
 
 ## Licenza
 
-MIT
+[MIT](LICENSE)

@@ -387,7 +387,7 @@ PluginSettings {
     StyledText {
         width: parent ? parent.width : implicitWidth
         wrapMode: Text.WordWrap
-        text: I18n.trFor("dmsProfiles", "While switching, the screen is frozen, the profile is applied underneath and then revealed with an animation, so bars, colors and wallpaper change in one step.")
+        text: I18n.trFor("dmsProfiles", "While switching, the screen stands still for a moment and the animation runs onto the wallpaper of the new profile. Bars, windows and widgets then fade in with the new look.")
         font.pixelSize: Theme.fontSizeSmall
         color: Theme.surfaceVariantText
     }
@@ -597,7 +597,7 @@ PluginSettings {
     StringSetting {
         settingKey: "applyCommand"
         label: I18n.trFor("dmsProfiles", "Apply command")
-        description: I18n.trFor("dmsProfiles", "Optional. Runs after switching, before the screen is revealed. DMS_PROFILE_DIR, DMS_PROFILE_SLUG and DMS_PROFILE_NAME are set.")
+        description: I18n.trFor("dmsProfiles", "Optional. Runs while switching, before the new desktop is shown. DMS_PROFILE_DIR, DMS_PROFILE_SLUG and DMS_PROFILE_NAME are set.")
         defaultValue: ""
     }
 }

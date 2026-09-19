@@ -10,7 +10,9 @@ Pas à pas avec des images : [guide d'installation et de configuration](docs/GUI
 
 ## Changer de profil
 
-Ouvrez le sélecteur avec un raccourci clavier et choisissez un profil. Pendant le changement, l'écran reste figé environ une seconde, le profil est appliqué en dessous, puis l'ancienne image disparaît avec une animation. Barres, couleurs et fond d'écran changent d'un seul coup au lieu de l'un après l'autre.
+Ouvrez le sélecteur avec un raccourci clavier et choisissez un profil. L'écran s'arrête un instant (environ 0,2 s) pendant sa capture. La transition passe ensuite tout de suite de l'ancienne image au fond d'écran du nouveau profil. Pendant ce temps, DMS applique le profil, et dès qu'il est prêt, barres, cadre, fenêtres et widgets apparaissent en fondu sur le nouveau fond. On ne voit pas le shell changer morceau par morceau.
+
+Les profils sans fond d'écran propre suivent l'ancien déroulement : l'image capturée reste affichée jusqu'à ce que le profil soit appliqué, puis la transition dévoile le bureau terminé. La durée de la transition se règle dans les paramètres (1,2 s par défaut).
 
 Vous avez le choix entre 29 transitions, dont fondu, balayage, cercle, portes, stores, fusion, éclats, un écran CRT qui s'éteint, de la neige et cinq effets de hack. Le mode Aléatoire peut se limiter à celles que vous aimez. Sur la plupart des animations, le bord brille dans la couleur d'accent du nouveau profil.
 
@@ -35,7 +37,7 @@ Les paramètres de plugins peuvent aussi faire partie d'un profil. Saisissez les
 Les couleurs du terminal, les thèmes du navigateur ou les règles du compositeur que DMS ne gère pas peuvent être pris en charge par deux commandes facultatives :
 
 - La commande d'enregistrement s'exécute quand un profil est enregistré. Le JSON qu'elle affiche est stocké dans le profil sous `extras`.
-- La commande d'application s'exécute pendant le changement, dès que DMS a chargé les nouveaux paramètres. L'écran est dévoilé quand elle a terminé. Elle reçoit `DMS_PROFILE_DIR`, `DMS_PROFILE_SLUG`, `DMS_PROFILE_NAME` et `DMS_PROFILE_NEW_COLORS` (1 si de nouvelles couleurs sont générées). Le fichier du profil est `$DMS_PROFILE_DIR/profile.json`.
+- La commande d'application s'exécute pendant le changement, juste après l'écriture des nouveaux paramètres. Le nouveau bureau n'apparaît qu'une fois qu'elle a terminé. Elle reçoit `DMS_PROFILE_DIR`, `DMS_PROFILE_SLUG`, `DMS_PROFILE_NAME` et `DMS_PROFILE_NEW_COLORS` (1 si de nouvelles couleurs sont générées). Le fichier du profil est `$DMS_PROFILE_DIR/profile.json`.
 
 Un petit exemple qui conserve la police de l'interface GTK pour chaque profil :
 
@@ -50,12 +52,21 @@ gsettings set org.gnome.desktop.interface font-name \
 
 ## Prérequis
 
-DankMaterialShell 1.6.1 ou plus récent. La transition utilise `dms screenshot`, fourni avec DMS. J'utilise le plugin sous niri. L'espacement des fenêtres, le rayon des coins et la largeur de la bordure sont écrits par DMS lui-même dans la configuration du compositeur, ils devraient donc suivre le profil aussi sur les autres compositeurs pris en charge par DMS.
+DankMaterialShell 1.6.1 ou plus récent. Pour la transition, l'écran est capturé avec `grim` s'il est installé, sinon avec `dms screenshot`, fourni avec DMS. J'utilise le plugin sous niri. L'espacement des fenêtres, le rayon des coins et la largeur de la bordure sont écrits par DMS lui-même dans la configuration du compositeur, ils devraient donc suivre le profil aussi sur les autres compositeurs pris en charge par DMS.
 
 ## Installation
 
+Depuis le registre des plugins :
+
 ```sh
-git clone https://github.com/21Rebel/dms-profiles ~/.config/DankMaterialShell/plugins/DmsProfiles
+dms plugins install dmsProfiles
+dms ipc call plugins enable dmsProfiles
+```
+
+Il figure aussi dans DMS sous Paramètres → Plugins → Parcourir. Pour l’installer depuis le dépôt :
+
+```sh
+git clone https://github.com/satoshoe-dev/dms-profiles ~/.config/DankMaterialShell/plugins/DmsProfiles
 dms ipc call plugins enable dmsProfiles
 ```
 
@@ -91,4 +102,4 @@ J'ai écrit ce plugin avec l'aide de Claude (Anthropic) et je l'utilise tous les
 
 ## Licence
 
-MIT
+[MIT](LICENSE)

@@ -4,8 +4,16 @@
 
 ## 1. Installer et activer le plugin
 
+Depuis le registre des plugins :
+
 ```sh
-git clone https://github.com/21Rebel/dms-profiles ~/.config/DankMaterialShell/plugins/DmsProfiles
+dms plugins install dmsProfiles
+```
+
+Il figure aussi dans DMS sous Paramètres → Plugins → Parcourir. Ou clonez le dépôt dans votre dossier de plugins DMS :
+
+```sh
+git clone https://github.com/satoshoe-dev/dms-profiles ~/.config/DankMaterialShell/plugins/DmsProfiles
 ```
 
 Ouvrez Paramètres → Plugins et activez Profiles.
@@ -40,7 +48,7 @@ Appuyez sur le raccourci, choisissez un profil avec la molette de la souris ou l
 
 ![Le sélecteur en carrousel](images/03-picker-carousel.png)
 
-L'écran se fige environ une seconde, le profil est appliqué en dessous puis révélé par une animation.
+L'écran s'arrête un instant pendant sa capture. La transition passe ensuite au fond d'écran du nouveau profil, et barres, cadre, fenêtres et widgets apparaissent en fondu dès que DMS a appliqué le profil. Si un profil n'a pas de fond d'écran propre, la transition dévoile à la place le bureau terminé.
 
 ![Une transition en cours](images/04-transition.png)
 
@@ -54,7 +62,7 @@ Sous « Sélecteur de profils », choisissez l'affichage (rangée, libre, carr
 
 ## 7. Choisir la transition
 
-Sous « Transition », choisissez un type ou laissez « Aléatoire ». Avec Aléatoire, cliquez sur les types à autoriser. « Tester la transition » joue l'animation une fois sans changer de profil, avec l'ancienne image affichée en gris.
+Sous « Transition », choisissez un type ou laissez « Aléatoire ». Avec Aléatoire, cliquez sur les types à autoriser. « Durée » règle la durée de l'animation, 1200 ms par défaut. « Tester la transition » joue l'animation une fois sans changer de profil, avec l'ancienne image affichée en gris.
 
 ![Réglages de la transition](images/07-transition-settings.png)
 

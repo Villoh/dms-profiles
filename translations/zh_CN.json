@@ -104,8 +104,8 @@
     "Transition": {
         "Transition": "过渡动画"
     },
-    "While switching, the screen is frozen, the profile is applied underneath and then revealed with an animation, so bars, colors and wallpaper change in one step.": {
-        "While switching, the screen is frozen, the profile is applied underneath and then revealed with an animation, so bars, colors and wallpaper change in one step.": "切换时屏幕会先定格，在下方应用配置，再用动画显示出来，因此状态栏、颜色和壁纸会一次性完成切换。"
+    "While switching, the screen stands still for a moment and the animation runs onto the wallpaper of the new profile. Bars, windows and widgets then fade in with the new look.": {
+        "While switching, the screen stands still for a moment and the animation runs onto the wallpaper of the new profile. Bars, windows and widgets then fade in with the new look.": "切换时屏幕会短暂定格，动画随后过渡到新配置的壁纸。接着状态栏、窗口和部件以新的外观淡入。"
     },
     "Random": {
         "Random": "随机"
@@ -236,8 +236,8 @@
     "Apply command": {
         "Apply command": "应用命令"
     },
-    "Optional. Runs after switching, before the screen is revealed. DMS_PROFILE_DIR, DMS_PROFILE_SLUG and DMS_PROFILE_NAME are set.": {
-        "Optional. Runs after switching, before the screen is revealed. DMS_PROFILE_DIR, DMS_PROFILE_SLUG and DMS_PROFILE_NAME are set.": "可选。在切换之后、屏幕显示之前运行。会设置 DMS_PROFILE_DIR、DMS_PROFILE_SLUG 和 DMS_PROFILE_NAME。"
+    "Optional. Runs while switching, before the new desktop is shown. DMS_PROFILE_DIR, DMS_PROFILE_SLUG and DMS_PROFILE_NAME are set.": {
+        "Optional. Runs while switching, before the new desktop is shown. DMS_PROFILE_DIR, DMS_PROFILE_SLUG and DMS_PROFILE_NAME are set.": "可选。在切换过程中、新桌面显示之前运行。会设置 DMS_PROFILE_DIR、DMS_PROFILE_SLUG 和 DMS_PROFILE_NAME。"
     },
     "Could not switch profile": {
         "Could not switch profile": "无法切换配置"

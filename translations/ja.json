@@ -104,8 +104,8 @@
     "Transition": {
         "Transition": "トランジション"
     },
-    "While switching, the screen is frozen, the profile is applied underneath and then revealed with an animation, so bars, colors and wallpaper change in one step.": {
-        "While switching, the screen is frozen, the profile is applied underneath and then revealed with an animation, so bars, colors and wallpaper change in one step.": "切り替え中は画面を止め、その下でプロファイルを適用してからアニメーションで表示します。バー、色、壁紙が一度に切り替わります。"
+    "While switching, the screen stands still for a moment and the animation runs onto the wallpaper of the new profile. Bars, windows and widgets then fade in with the new look.": {
+        "While switching, the screen stands still for a moment and the animation runs onto the wallpaper of the new profile. Bars, windows and widgets then fade in with the new look.": "切り替え時は画面が一瞬止まり、アニメーションで新しいプロファイルの壁紙に移ります。その後、バー、ウィンドウ、ウィジェットが新しい見た目でフェードインします。"
     },
     "Random": {
         "Random": "ランダム"
@@ -236,8 +236,8 @@
     "Apply command": {
         "Apply command": "適用コマンド"
     },
-    "Optional. Runs after switching, before the screen is revealed. DMS_PROFILE_DIR, DMS_PROFILE_SLUG and DMS_PROFILE_NAME are set.": {
-        "Optional. Runs after switching, before the screen is revealed. DMS_PROFILE_DIR, DMS_PROFILE_SLUG and DMS_PROFILE_NAME are set.": "任意。切り替えの後、画面が表示される前に実行されます。DMS_PROFILE_DIR、DMS_PROFILE_SLUG、DMS_PROFILE_NAME が設定されます。"
+    "Optional. Runs while switching, before the new desktop is shown. DMS_PROFILE_DIR, DMS_PROFILE_SLUG and DMS_PROFILE_NAME are set.": {
+        "Optional. Runs while switching, before the new desktop is shown. DMS_PROFILE_DIR, DMS_PROFILE_SLUG and DMS_PROFILE_NAME are set.": "任意。切り替え中、新しいデスクトップが表示される前に実行されます。DMS_PROFILE_DIR、DMS_PROFILE_SLUG、DMS_PROFILE_NAME が設定されます。"
     },
     "Could not switch profile": {
         "Could not switch profile": "プロファイルを切り替えられませんでした"
