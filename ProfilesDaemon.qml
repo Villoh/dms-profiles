@@ -918,7 +918,7 @@ PluginComponent {
             return JSON.stringify(store.profiles);
         }
 
-        // dms ipc call profiles show SLUG true|false  -- in the picker or not
+        // dms ipc call profiles show SLUG true|false  (shown in the picker or not)
         function show(slug: string, on: string): string {
             if (!store.find(slug))
                 return "no profile " + slug;
