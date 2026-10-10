@@ -1,7 +1,7 @@
 {
     "id": "dmsProfiles",
     "name": "Profiles",
-    "description": "Save the complete look of the shell (theme, accent, light or dark, wallpaper, bars, frame, transparency, desktop widgets) as profiles and switch between them with an animated transition",
+    "description": "Save the whole look of the shell as profiles and switch between them",
     "version": "2.0.0",
     "author": "satoshoe",
     "type": "daemon",
