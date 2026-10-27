@@ -168,8 +168,11 @@ PluginComponent {
         if (!r)
             return dms;
         const line = slug + ": settings " + r.from + " -> " + root.settingsVersion + (r.notes.length ? " (" + r.notes.join("; ") + ")" : "");
-        console.info("Profiles:", line);
-        root.migrationLog = root.migrationLog.concat([line]);
+        // the start copy of a profile gives the same line a second time
+        if (root.migrationLog.indexOf(line) < 0) {
+            console.info("Profiles:", line);
+            root.migrationLog = root.migrationLog.concat([line]);
+        }
         return r.dms;
     }
 
@@ -648,6 +651,18 @@ PluginComponent {
         want.wallpaperPath = wallpaper || res(s.wallpaperPath || "") || SessionData.wallpaperPath;
         want.perMonitorWallpaper = perMonitor;
         want.perModeWallpaper = perMode;
+        // maps the profile does not use are emptied after the switches; left
+        // behind they pointed at other profiles' (maybe deleted) pictures
+        if (!perMonitor)
+            want.monitorWallpapers = {};
+        if (!(perMode && perMonitor)) {
+            want.monitorWallpapersLight = {};
+            want.monitorWallpapersDark = {};
+        }
+        if (!perMode || perMonitor) {
+            want.wallpaperPathLight = "";
+            want.wallpaperPathDark = "";
+        }
         let changed = false;
         for (const k in want) {
             if (store.stable(SessionData[k]) !== store.stable(want[k])) {
