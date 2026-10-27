@@ -641,14 +641,20 @@ PluginComponent {
         const want = {};
         if (perMonitor)
             want.monitorWallpapers = resMap(s.monitorWallpapers);
+        want.wallpaperPath = wallpaper || res(s.wallpaperPath || "") || SessionData.wallpaperPath;
+        // per mode, what is shown is the picture of the profile's mode, as DMS
+        // would pick it (syncWallpaperForCurrentMode), not the main wallpaper
         if (perMode && perMonitor) {
             want.monitorWallpapersLight = resMap(s.monitorWallpapersLight);
             want.monitorWallpapersDark = resMap(s.monitorWallpapersDark);
+            const shown = root.wantLight ? want.monitorWallpapersLight : want.monitorWallpapersDark;
+            if (Object.keys(shown).length > 0)
+                want.monitorWallpapers = Object.assign({}, shown);
         } else if (perMode) {
             want.wallpaperPathLight = res(s.wallpaperPathLight || "");
             want.wallpaperPathDark = res(s.wallpaperPathDark || "");
+            want.wallpaperPath = (root.wantLight ? want.wallpaperPathLight : want.wallpaperPathDark) || want.wallpaperPath;
         }
-        want.wallpaperPath = wallpaper || res(s.wallpaperPath || "") || SessionData.wallpaperPath;
         want.perMonitorWallpaper = perMonitor;
         want.perModeWallpaper = perMode;
         // maps the profile does not use are emptied after the switches; left
