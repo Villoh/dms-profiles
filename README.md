@@ -52,7 +52,7 @@ gsettings set org.gnome.desktop.interface font-name \
 
 ## Requirements
 
-DankMaterialShell 1.6.1 or newer. For the transition the screen is captured with `grim` if it is installed, otherwise with `dms screenshot`, which comes with DMS. I use the plugin on niri. Window gaps, corner radius and border width are written to the compositor config by DMS itself, so they should follow a profile on other compositors DMS supports as well.
+DankMaterialShell 1.6.1 or newer, tested with 1.6.2 and 2.0.0. Profiles saved under 1.6 are converted on the first start under 2.0; the original stays next to each profile as `profile.v18.json`. For the transition the screen is captured with `grim` if it is installed, otherwise with `dms screenshot`, which comes with DMS. I use the plugin on niri. Window gaps, corner radius and border width are written to the compositor config by DMS itself, so they should follow a profile on other compositors DMS supports as well.
 
 ## Installation
 
