@@ -262,5 +262,50 @@
     },
     "DMS did not load the profile values": {
         "DMS did not load the profile values": "DMS не загрузил значения профиля"
+    },
+    "Error: %1": {
+        "Error: %1": "Ошибка: %1"
+    },
+    "Switching to “%1”…": {
+        "Switching to “%1”…": "Переключение на «%1»…"
+    },
+    "Creating “%1”…": {
+        "Creating “%1”…": "Создание «%1»…"
+    },
+    "“%1” created and active": {
+        "“%1” created and active": "«%1» создан и активен"
+    },
+    "“%1” is active": {
+        "“%1” is active": "«%1» активен"
+    },
+    "Click to apply · Scroll to browse · Manage profiles in the plugin settings": {
+        "Click to apply · Scroll to browse · Manage profiles in the plugin settings": "Щелчок — применить · Прокрутка — листать · Управление в настройках плагина"
+    },
+    "The Profiles plugin is not running": {
+        "The Profiles plugin is not running": "Плагин «Профили» не запущен"
+    },
+    "A profile with this name exists": {
+        "A profile with this name exists": "Профиль с таким именем уже есть"
+    },
+    "Enter a name": {
+        "Enter a name": "Введите имя"
+    },
+    "A switch is already running": {
+        "A switch is already running": "Переключение уже выполняется"
+    },
+    "Profile not found": {
+        "Profile not found": "Профиль не найден"
+    },
+    "Profiles converted for the new DMS version": {
+        "Profiles converted for the new DMS version": "Профили преобразованы для новой версии DMS"
+    },
+    "The active profile was applied again.": {
+        "The active profile was applied again.": "Активный профиль применён заново."
+    },
+    "The active profile could not be applied. Its changes are not saved until a profile is applied.": {
+        "The active profile could not be applied. Its changes are not saved until a profile is applied.": "Не удалось применить активный профиль. Изменения не сохраняются, пока не будет применён профиль."
+    },
+    "Drag a row to change the order.": {
+        "Drag a row to change the order.": "Перетащите строку, чтобы изменить порядок."
     }
 }

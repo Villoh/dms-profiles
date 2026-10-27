@@ -17,6 +17,7 @@ import qs.Common
 import qs.Services
 import qs.Widgets
 import qs.Modules.Plugins
+import "ProfileMigration.js" as Migration
 
 PluginComponent {
     id: root
@@ -59,8 +60,19 @@ PluginComponent {
         "frameBarSize", "frameBlurEnabled", "frameCloseGaps", "frameShowOnOverview",
         "barInsetPaddingShared", "barInsetPaddingSyncAll", "frameBarInsetPadding",
         // positions and grid live in SessionData, see snapshot() and applyProfile()
-        "desktopWidgetInstances"
+        "desktopWidgetInstances",
+        // DMS 2.0 (settings version 42). Some replace keys above (radius,
+        // animation speeds, dock); snapshot() only takes keys the running DMS has.
+        "radiusStrength", "radiusMode", "fixedRadius",
+        "animationDuration", "popoutAnimationDuration", "modalAnimationDuration", "notificationAnimationDuration",
+        "dockConfigs", "blurStrength", "blurBorderSeeded", "containerSaturation", "displayFontFamily",
+        "hostSurfaceColor", "hostSurfaceCustomColor", "cardSurfaceColor", "cardSurfaceCustomColor",
+        "chipSurfaceColor", "chipSurfaceCustomColor", "chipSurfaceNestedColor", "chipSurfaceNestedCustomColor",
+        "matugenSeedColor", "matugenSpec", "terminalOpacity", "terminalPalette"
     ]
+
+    // DMS 2.0 computes cornerRadius from these three and no longer lets it be set
+    readonly property bool radiusFromStrength: SettingsData.radiusStrength !== undefined
 
     // Bar keys that stay out of a profile: identity and monitor assignment.
     // `enabled` stays out on purpose, a profile without a bar would be hard to undo.
@@ -113,6 +125,128 @@ PluginComponent {
         id: store
     }
 
+    // ------------------------------------------------------------------ migration
+    // Profiles from an older settings format (DMS 1.6 under DMS 2.0) go through
+    // DMS' own migration, see ProfileMigration.js. Under DMS 1.6 nothing runs.
+    readonly property int settingsVersion: SettingsData.settingsConfigVersion || 0
+    // false until the profiles on disk are in the running format; autosave
+    // waits for it, so no old profile is overwritten before it is converted
+    property bool migrationDone: root.settingsVersion <= Migration.baseVersion
+    // The active profile was converted, but the running settings are DMS' own
+    // migration of settings.json, which loses the frame opacity. So the active
+    // profile is applied once right after the conversion. Autosave stays off
+    // until that has worked (or a profile has been applied or saved by hand).
+    property bool pausedByMigration: false
+    property string migrationApplySlug: ""
+    property var migrationLog: []
+    property var _dmsSettingsStore: null
+
+    // DMS' SettingsStore.js from the running shell, loaded on first use
+    function settingsStore() {
+        if (root._dmsSettingsStore)
+            return root._dmsSettingsStore;
+        const dir = "file://" + Theme.shellDir + "/Common/settings/";
+        try {
+            root._dmsSettingsStore = Qt.createQmlObject("import QtQml\n" + "import \"" + dir + "SettingsStore.js\" as Store\n" + "import \"" + dir + "SettingsSpec.js\" as Spec\n" + "import \"" + dir + "BarWidgetDefaults.js\" as Widgets\n" + "QtObject {\n" + "    readonly property var migratedGlobals: Widgets.MIGRATED_GLOBALS\n" + "    function migrate(obj, version) { return Store.migrateToVersion(obj, version); }\n" + "    function known(key) { return Spec.SPEC[key] !== undefined; }\n" + "}\n", root, "dmsProfilesSettingsStore");
+        } catch (e) {
+            console.warn("Profiles: could not load the DMS settings migration:", e);
+        }
+        return root._dmsSettingsStore;
+    }
+
+    // The profile's dms part in the running format; unchanged when it already is
+    function migratedDms(dms, slug) {
+        if (!Migration.needsMigration(dms, root.settingsVersion))
+            return dms;
+        const st = root.settingsStore();
+        let r = null;
+        try {
+            r = st ? Migration.migrate(dms, root.settingsVersion, st, SettingsData.barConfigs) : null;
+        } catch (e) {
+            console.warn("Profiles: migrating", slug, "failed:", e);
+        }
+        if (!r)
+            return dms;
+        const line = slug + ": settings " + r.from + " -> " + root.settingsVersion + (r.notes.length ? " (" + r.notes.join("; ") + ")" : "");
+        console.info("Profiles:", line);
+        root.migrationLog = root.migrationLog.concat([line]);
+        return r.dms;
+    }
+
+    // Applies the converted active profile once. Waits a moment so the shell
+    // has finished starting; a switch that is still busy is tried again.
+    Timer {
+        id: migrationApply
+        interval: 3000
+        property int tries: 0
+        onTriggered: {
+            const slug = root.migrationApplySlug;
+            if (!slug)
+                return;
+            const r = root.apply(slug);
+            if (r === "started")
+                return;
+            if (r === "busy" && ++tries < 5) {
+                restart();
+                return;
+            }
+            root.migrationApplied(false);
+        }
+    }
+
+    function migrationApplied(ok) {
+        root.migrationApplySlug = "";
+        if (ok) {
+            ToastService.showInfo(I18n.trFor("dmsProfiles", "Profiles converted for the new DMS version"), I18n.trFor("dmsProfiles", "The active profile was applied again."));
+        } else {
+            root.pausedByMigration = true;
+            ToastService.showWarning(I18n.trFor("dmsProfiles", "Profiles converted for the new DMS version"), I18n.trFor("dmsProfiles", "The active profile could not be applied. Its changes are not saved until a profile is applied."));
+        }
+    }
+
+    Connections {
+        target: root
+        function onSwitched(slug, ok) {
+            if (root.migrationApplySlug !== "" && slug === root.migrationApplySlug)
+                root.migrationApplied(ok);
+        }
+    }
+
+    // Once after an update of DMS: rewrite every profile in the new format and
+    // keep the original next to it as profile.v<old version>.json
+    function migrateProfiles() {
+        if (root.migrationDone)
+            return;
+        const slugs = store.profiles.filter(p => p.oldFormat).map(p => p.slug);
+        const active = store.activeSlug;
+        let converted = 0;
+        const next = i => {
+            if (i >= slugs.length) {
+                root.migrationDone = true;
+                if (converted === 0)
+                    return;
+                store.refresh();
+                if (root.pausedByMigration) {
+                    migrationApply.tries = 0;
+                    root.migrationApplySlug = active;
+                    migrationApply.restart();
+                } else {
+                    ToastService.showInfo(I18n.trFor("dmsProfiles", "Profiles converted for the new DMS version"));
+                }
+                return;
+            }
+            store.migrate(slugs[i], dms => root.migratedDms(dms, slugs[i]), done => {
+                if (done) {
+                    converted++;
+                    if (slugs[i] === active)
+                        root.pausedByMigration = true;
+                }
+                next(i + 1);
+            });
+        };
+        next(0);
+    }
+
     // ------------------------------------------------------------------ snapshot
     function snapshot() {
         const settings = {};
@@ -136,16 +270,37 @@ PluginComponent {
         for (const id of root.profilePlugins)
             plugins[id] = SettingsData.getPluginSettingsForPlugin(id);
         return {
+            // Settings format the values were taken from, for migrating old profiles
+            "configVersion": SettingsData.settingsConfigVersion,
             "settings": settings,
             "bars": bars,
             "plugins": plugins,
-            "session": {
-                "wallpaperPath": SessionData.wallpaperPath,
-                "isLightMode": SessionData.isLightMode,
-                "desktopWidgetInstancePositions": root.clone(SessionData.desktopWidgetInstancePositions),
-                "desktopWidgetGridSettings": root.clone(SessionData.desktopWidgetGridSettings)
-            }
+            "session": root.sessionSnapshot()
         };
+    }
+
+    // With a wallpaper per monitor or per light/dark mode, wallpaperPath alone
+    // is not what is shown (issue #1). The maps are only taken when the mode is
+    // on; otherwise DMS keeps stale values in them.
+    function sessionSnapshot() {
+        const s = {
+            "wallpaperPath": SessionData.wallpaperPath,
+            "isLightMode": SessionData.isLightMode,
+            "desktopWidgetInstancePositions": root.clone(SessionData.desktopWidgetInstancePositions),
+            "desktopWidgetGridSettings": root.clone(SessionData.desktopWidgetGridSettings),
+            "perMonitorWallpaper": SessionData.perMonitorWallpaper === true,
+            "perModeWallpaper": SessionData.perModeWallpaper === true
+        };
+        if (s.perMonitorWallpaper)
+            s.monitorWallpapers = root.clone(SessionData.monitorWallpapers || {});
+        if (s.perModeWallpaper && s.perMonitorWallpaper) {
+            s.monitorWallpapersLight = root.clone(SessionData.monitorWallpapersLight || {});
+            s.monitorWallpapersDark = root.clone(SessionData.monitorWallpapersDark || {});
+        } else if (s.perModeWallpaper) {
+            s.wallpaperPathLight = SessionData.wallpaperPathLight || "";
+            s.wallpaperPathDark = SessionData.wallpaperPathDark || "";
+        }
+        return s;
     }
 
     // Calls back with the extras object, or undefined when no save command is set
@@ -184,6 +339,7 @@ PluginComponent {
         }
         root.saveCurrent(slug, n, () => store.setActive(slug, () => store.writeStart(slug, () => {
                     root.pausedByError = false;
+                    root.pausedByMigration = false;
                     callback && callback("");
                 })));
     }
@@ -198,7 +354,7 @@ PluginComponent {
     function autosaveNow(callback) {
         const slug = store.activeSlug;
         const entry = store.find(slug);
-        if (!root.autosave || root.switching || root.pausedByError || !entry) {
+        if (!root.autosave || root.switching || root.pausedByError || root.pausedByMigration || !root.migrationDone || !entry) {
             callback && callback(false);
             return;
         }
@@ -238,14 +394,14 @@ PluginComponent {
     }
 
     FileView {
-        path: Paths.strip(StandardPaths.writableLocation(StandardPaths.ConfigLocation)) + "/DankMaterialShell/settings.json"
+        path: Paths.strip(Paths.config) + "/settings.json"
         watchChanges: true
         printErrors: false
         onFileChanged: root.scheduleAutosave()
     }
 
     FileView {
-        path: Paths.strip(StandardPaths.writableLocation(StandardPaths.GenericStateLocation)) + "/DankMaterialShell/session.json"
+        path: Paths.strip(Paths.state) + "/session.json"
         watchChanges: true
         printErrors: false
         onFileChanged: root.scheduleAutosave()
@@ -259,12 +415,12 @@ PluginComponent {
         onTriggered: root.autosaveNow()
     }
 
-    Component.onCompleted: store.refresh()
+    Component.onCompleted: store.refresh(() => root.migrateProfiles())
 
     // ------------------------------------------------------------------ switching
     FileView {
         id: settingsFile
-        path: Paths.strip(StandardPaths.writableLocation(StandardPaths.ConfigLocation)) + "/DankMaterialShell/settings.json"
+        path: Paths.strip(Paths.config) + "/settings.json"
         blockLoading: true
         printErrors: false
     }
@@ -278,10 +434,13 @@ PluginComponent {
         const wasConnected = root.connected(current);
         const want = dms.settings || {};
         const oldInstances = current.desktopWidgetInstances;
+        const oldDocks = current.dockConfigs;
         for (const k in want)
             current[k] = want[k];
         if (Array.isArray(want.desktopWidgetInstances) && Array.isArray(oldInstances))
             current.desktopWidgetInstances = root.mergeWidgetInstances(oldInstances, want.desktopWidgetInstances);
+        if (Array.isArray(want.dockConfigs) && Array.isArray(oldDocks))
+            current.dockConfigs = root.mergeDocks(oldDocks, want.dockConfigs);
         const bars = dms.bars || {};
         const all = current.barConfigs || [];
         for (let i = 0; i < all.length; i++) {
@@ -324,6 +483,22 @@ PluginComponent {
         return current;
     }
 
+    // DMS 2.0 keeps docks as a list like the bars. A profile sets the look of
+    // the docks it knows; whether a dock is on and where it shows stays as is.
+    function mergeDocks(current, wanted) {
+        return current.map(dock => {
+            const want = wanted.find(w => w && w.id === dock.id);
+            if (!want)
+                return dock;
+            const out = Object.assign({}, dock);
+            for (const k in want) {
+                if (root.barSkipKeys.indexOf(k) < 0)
+                    out[k] = want[k];
+            }
+            return out;
+        });
+    }
+
     // Widgets the profile does not know stay in the list, switched off, and the
     // current order is kept. DMS rebuilds every desktop widget as soon as the
     // set of instances or their order changes (DesktopWidgetLayer
@@ -354,7 +529,8 @@ PluginComponent {
 
     function settingsLoaded(dms) {
         const want = dms.settings || {};
-        for (const k of ["cornerRadius", "registryThemeVariants", "popupTransparency", "frameEnabled"]) {
+        const radiusKeys = root.radiusFromStrength ? ["radiusStrength", "radiusMode", "fixedRadius"] : ["cornerRadius"];
+        for (const k of radiusKeys.concat(["registryThemeVariants", "popupTransparency", "frameEnabled"])) {
             if (want[k] !== undefined && store.stable(SettingsData[k]) !== store.stable(want[k]))
                 return false;
         }
@@ -368,8 +544,8 @@ PluginComponent {
     }
 
     function writeSettingsText(text, callback) {
-        // DMS skips the next file change while _selfWrite is set. Older DMS
-        // versions leave it set after a save that wrote nothing.
+        // DMS 1.6 skips the next file change while _selfWrite is set and can
+        // leave it set after a save that wrote nothing. DMS 2.0 no longer has it.
         if (SettingsData._selfWrite !== undefined)
             SettingsData._selfWrite = false;
         const path = settingsFile.path;
@@ -378,7 +554,7 @@ PluginComponent {
     }
 
     // Applies what DMS skips when it reloads settings.json from disk
-    function applyProfile(p, wallpaper) {
+    function applyProfile(p, wallpaper, slug) {
         const d = p.dms || {};
         SettingsData.applyStoredTheme();
         // applyStoredTheme only reloads a custom theme when its name or file
@@ -417,19 +593,71 @@ PluginComponent {
         lightGuard.rounds = 0;
         lightGuard.restart();
 
-        if (wallpaper && wallpaper !== SessionData.wallpaperPath) {
-            // Under the overlay the DMS wallpaper transition is not visible and only adds waiting time
-            if (transition.state !== "idle" && SessionData.wallpaperTransition !== "none") {
-                restoreWallpaperTransition.value = SessionData.wallpaperTransition;
-                SessionData.wallpaperTransition = "none";
-                restoreWallpaperTransition.restart();
-            }
+        const s = d.session || {};
+        if (s.perMonitorWallpaper !== undefined) {
+            if (root.applyWallpapers(p, slug, wallpaper))
+                SessionData.wallpaperCyclingFolderPath = "";
+            SessionData.saveSettings();
+            Theme.generateSystemThemesFromCurrentTheme();
+        } else if (wallpaper && wallpaper !== SessionData.wallpaperPath) {
+            // profile from before the wallpaper modes were saved
+            root.quietWallpaperTransition();
             SessionData.setWallpaper(wallpaper);
             SessionData.wallpaperCyclingFolderPath = "";
             SessionData.saveSettings();
         } else {
             Theme.generateSystemThemesFromCurrentTheme();
         }
+    }
+
+    // Under the overlay the DMS wallpaper transition is not visible and only adds waiting time
+    function quietWallpaperTransition() {
+        if (transition.state !== "idle" && SessionData.wallpaperTransition !== "none") {
+            restoreWallpaperTransition.value = SessionData.wallpaperTransition;
+            SessionData.wallpaperTransition = "none";
+            restoreWallpaperTransition.restart();
+        }
+    }
+
+    // Sets wallpaper, per-monitor and per-mode wallpapers as saved, with the
+    // copies in the profile folder. Set directly instead of through
+    // setMonitorWallpaper and friends: those save and regenerate the colors
+    // once per call. Returns true if anything changed.
+    function applyWallpapers(p, slug, wallpaper) {
+        const s = p.dms.session;
+        const res = path => store.resolveWallpaper(slug, p, path);
+        const resMap = map => {
+            const out = {};
+            for (const k in (map || {}))
+                out[k] = res(map[k]);
+            return out;
+        };
+        const perMonitor = s.perMonitorWallpaper === true;
+        const perMode = s.perModeWallpaper === true;
+        // maps first, the two switches last, so nothing is drawn from a half set state
+        const want = {};
+        if (perMonitor)
+            want.monitorWallpapers = resMap(s.monitorWallpapers);
+        if (perMode && perMonitor) {
+            want.monitorWallpapersLight = resMap(s.monitorWallpapersLight);
+            want.monitorWallpapersDark = resMap(s.monitorWallpapersDark);
+        } else if (perMode) {
+            want.wallpaperPathLight = res(s.wallpaperPathLight || "");
+            want.wallpaperPathDark = res(s.wallpaperPathDark || "");
+        }
+        want.wallpaperPath = wallpaper || res(s.wallpaperPath || "") || SessionData.wallpaperPath;
+        want.perMonitorWallpaper = perMonitor;
+        want.perModeWallpaper = perMode;
+        let changed = false;
+        for (const k in want) {
+            if (store.stable(SessionData[k]) !== store.stable(want[k])) {
+                if (!changed)
+                    root.quietWallpaperTransition();
+                changed = true;
+                SessionData[k] = want[k];
+            }
+        }
+        return changed;
     }
 
     // Light/dark can still flip in the first seconds (portal sync, delayed GTK
@@ -496,6 +724,9 @@ PluginComponent {
                 root.switched(slug, false);
                 return;
             }
+            // normally done once at start; a profile copied in later is
+            // converted here, in memory only
+            p.dms = root.migratedDms(p.dms, slug);
             root.switching = true;
             root.startedAt = Date.now();
             root.timings = {};
@@ -632,7 +863,7 @@ PluginComponent {
     function stepApply() {
         const p = root.pendingProfile;
         const wall = p.wallpaper ? store.dir(root.pendingSlug) + "/" + p.wallpaper : "";
-        root.applyProfile(p, wall);
+        root.applyProfile(p, wall, root.pendingSlug);
         root.mark("applied");
         root.appliedAt = Date.now();
         root.colorsDone = false;
@@ -643,7 +874,7 @@ PluginComponent {
     }
 
     FileView {
-        path: Paths.strip(StandardPaths.writableLocation(StandardPaths.GenericCacheLocation)) + "/DankMaterialShell/dms-colors.json"
+        path: Paths.strip(Paths.cache) + "/dms-colors.json"
         watchChanges: true
         printErrors: false
         onFileChanged: {
@@ -721,6 +952,7 @@ PluginComponent {
             const slug = root.pendingSlug;
             store.setActive(slug, () => store.writeStart(slug, () => {
                     root.pausedByError = false;
+                    root.pausedByMigration = false;
                     // keep autosave paused until the light/dark guard is done
                     unpause.restart();
                     root.switched(slug, true);
@@ -936,6 +1168,9 @@ PluginComponent {
                 "active": store.activeSlug,
                 "switching": root.switching,
                 "pausedByError": root.pausedByError,
+                "pausedByMigration": root.pausedByMigration,
+                "settingsVersion": root.settingsVersion,
+                "migrated": root.migrationLog,
                 "lastError": root.lastError,
                 "transition": transition.state,
                 "timings": root.timings
@@ -961,6 +1196,7 @@ PluginComponent {
             const entry = store.find(store.activeSlug);
             root.saveCurrent(store.activeSlug, entry ? entry.name : store.activeSlug, () => store.writeStart(store.activeSlug));
             root.pausedByError = false;
+            root.pausedByMigration = false;
             return "started";
         }
 

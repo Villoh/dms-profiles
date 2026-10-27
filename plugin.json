@@ -4,11 +4,19 @@
     "description": "Save the whole look of the shell as profiles and switch between them",
     "version": "2.0.0",
     "author": "satoshoe",
-    "type": "daemon",
+    "type": "composite",
     "capabilities": [
-        "daemon"
+        "daemon",
+        "dash-tab"
     ],
-    "component": "./ProfilesDaemon.qml",
+    "components": {
+        "daemon": "./ProfilesDaemon.qml",
+        "dash": "./ProfilesDashTab.qml"
+    },
+    "dash": {
+        "title": "Profiles",
+        "icon": "palette"
+    },
     "settings": "./ProfilesSettings.qml",
     "icon": "palette",
     "requires_dms": ">=1.6.1",

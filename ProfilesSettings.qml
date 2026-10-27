@@ -16,6 +16,61 @@ PluginSettings {
     property string renameSlug: ""
     property string deleteSlug: ""
 
+    // Dragging a row to change the order. While dragging, the other rows
+    // already make room, so the drop position is visible.
+    readonly property int rowHeight: 64
+    readonly property int rowGap: Theme.spacingXS
+    property string dragSlug: ""
+    property int dragFrom: -1
+    property int dropIndex: -1
+    property real dragY: 0
+
+    // Order as shown: the dragged profile already sits where it will land
+    readonly property var displayOrder: {
+        const slugs = root.profiles.map(p => p.slug);
+        if (root.dragSlug === "" || root.dropIndex < 0)
+            return slugs;
+        const rest = slugs.filter(s => s !== root.dragSlug);
+        rest.splice(root.dropIndex, 0, root.dragSlug);
+        return rest;
+    }
+
+    function beginDrag(slug, index, y) {
+        root.renameSlug = "";
+        root.deleteSlug = "";
+        root.dragSlug = slug;
+        root.dragFrom = index;
+        root.dropIndex = index;
+        root.dragY = y;
+    }
+
+    function moveDrag(y) {
+        const step = root.rowHeight + root.rowGap;
+        root.dragY = Math.max(-step / 2, Math.min((root.profiles.length - 0.5) * step, y));
+        root.dropIndex = Math.max(0, Math.min(root.profiles.length - 1, Math.round(root.dragY / step)));
+    }
+
+    function endDrag() {
+        const slug = root.dragSlug;
+        const to = root.dropIndex;
+        const from = root.dragFrom;
+        if (slug === "")
+            return;
+        const moved = to >= 0 && to !== from;
+        if (moved) {
+            // keep the new order on screen, the daemon only confirms it
+            const list = root.profiles.slice();
+            list.splice(to, 0, list.splice(from, 1)[0]);
+            root.profiles = list;
+        }
+        root.dragSlug = "";
+        root.dragFrom = -1;
+        root.dropIndex = -1;
+        // same call as the arrow buttons, with the 1-based position
+        if (moved)
+            root.ipc(["move", slug, String(to + 1)], () => root.later());
+    }
+
     readonly property var _settings: SettingsData.pluginSettings
     function cfg(key, fallback) {
         root._settings;
@@ -50,7 +105,9 @@ PluginSettings {
                 return;
             }
             root.tries = 0;
-            root.profiles = liste;
+            // a refresh during a drag would throw the rows back
+            if (root.dragSlug === "")
+                root.profiles = liste;
         });
     }
 
@@ -110,16 +167,26 @@ PluginSettings {
         }
     }
 
-    Column {
-        width: parent ? parent.width : implicitWidth
-        spacing: Theme.spacingXS
+    StyledText {
+        visible: root.profiles.length === 0
+        text: I18n.trFor("dmsProfiles", "No profiles yet.")
+        color: Theme.surfaceVariantText
+        font.pixelSize: Theme.fontSizeMedium
+    }
 
-        StyledText {
-            visible: root.profiles.length === 0
-            text: I18n.trFor("dmsProfiles", "No profiles yet.")
-            color: Theme.surfaceVariantText
-            font.pixelSize: Theme.fontSizeMedium
-        }
+    StyledText {
+        visible: root.profiles.length > 1
+        width: parent ? parent.width : implicitWidth
+        wrapMode: Text.WordWrap
+        text: I18n.trFor("dmsProfiles", "Drag a row to change the order.")
+        color: Theme.surfaceVariantText
+        font.pixelSize: Theme.fontSizeSmall
+    }
+
+    Item {
+        id: list
+        width: parent ? parent.width : implicitWidth
+        height: Math.max(0, root.profiles.length * (root.rowHeight + root.rowGap) - root.rowGap)
 
         Repeater {
             model: root.profiles
@@ -131,18 +198,72 @@ PluginSettings {
 
                 readonly property bool renaming: root.renameSlug === modelData.slug
                 readonly property bool deleting: root.deleteSlug === modelData.slug
+                readonly property bool dragged: root.dragSlug === modelData.slug
+                readonly property int place: root.displayOrder.indexOf(modelData.slug)
 
-                width: parent ? parent.width : 0
-                height: 64
+                width: list.width
+                height: root.rowHeight
+                y: dragged ? root.dragY : place * (root.rowHeight + root.rowGap)
+                z: dragged ? 10 : 0
+                scale: dragged ? 1.02 : 1
                 radius: Theme.cornerRadius
-                color: modelData.active ? Theme.withAlpha(Theme.primary, 0.12) : Theme.withAlpha(Theme.surfaceContainerHigh, 0.6)
-                border.width: modelData.active ? 1 : 0
+                color: dragged ? Theme.surfaceContainerHighest : (modelData.active ? Theme.withAlpha(Theme.primary, 0.12) : Theme.withAlpha(Theme.surfaceContainerHigh, 0.6))
+                border.width: modelData.active || dragged ? 1 : 0
                 border.color: Theme.primary
+
+                Behavior on y {
+                    enabled: !row.dragged
+                    NumberAnimation {
+                        duration: 160
+                        easing.type: Easing.OutCubic
+                    }
+                }
+
+                Behavior on scale {
+                    NumberAnimation {
+                        duration: 120
+                    }
+                }
+
+                // Grab anywhere on the row except the buttons
+                MouseArea {
+                    id: grip
+                    anchors.fill: parent
+                    anchors.rightMargin: buttons.width + Theme.spacingS
+                    enabled: !row.renaming && root.profiles.length > 1
+                    hoverEnabled: true
+                    cursorShape: row.dragged ? Qt.ClosedHandCursor : Qt.OpenHandCursor
+                    preventStealing: true
+
+                    property real offset: 0
+
+                    onPressed: mouse => {
+                        offset = mouse.y;
+                        root.beginDrag(row.modelData.slug, row.index, row.y);
+                    }
+                    onPositionChanged: mouse => {
+                        if (!row.dragged)
+                            return;
+                        const p = mapToItem(list, mouse.x, mouse.y);
+                        root.moveDrag(p.y - offset);
+                    }
+                    onReleased: root.endDrag()
+                    onCanceled: root.endDrag()
+                }
 
                 Row {
                     anchors.fill: parent
                     anchors.margins: Theme.spacingS
                     spacing: Theme.spacingS
+
+                    DankIcon {
+                        id: handle
+                        anchors.verticalCenter: parent.verticalCenter
+                        name: "drag_indicator"
+                        size: Theme.iconSize
+                        color: Theme.surfaceVariantText
+                        opacity: root.profiles.length > 1 ? 1 : 0.3
+                    }
 
                     Image {
                         width: 80
@@ -155,7 +276,7 @@ PluginSettings {
                     }
 
                     Item {
-                        width: parent.width - 80 - buttons.width - Theme.spacingS * 2
+                        width: parent.width - handle.width - 80 - buttons.width - Theme.spacingS * 3
                         height: parent.height
 
                         DankTextField {

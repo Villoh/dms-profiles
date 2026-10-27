@@ -262,5 +262,50 @@
     },
     "DMS did not load the profile values": {
         "DMS did not load the profile values": "DMS n’a pas chargé les valeurs du profil"
+    },
+    "Error: %1": {
+        "Error: %1": "Erreur : %1"
+    },
+    "Switching to “%1”…": {
+        "Switching to “%1”…": "Passage à « %1 »…"
+    },
+    "Creating “%1”…": {
+        "Creating “%1”…": "Création de « %1 »…"
+    },
+    "“%1” created and active": {
+        "“%1” created and active": "« %1 » créé et actif"
+    },
+    "“%1” is active": {
+        "“%1” is active": "« %1 » est actif"
+    },
+    "Click to apply · Scroll to browse · Manage profiles in the plugin settings": {
+        "Click to apply · Scroll to browse · Manage profiles in the plugin settings": "Cliquer pour appliquer · Défiler pour parcourir · Gérer dans les réglages du plugin"
+    },
+    "The Profiles plugin is not running": {
+        "The Profiles plugin is not running": "Le plugin Profils ne tourne pas"
+    },
+    "A profile with this name exists": {
+        "A profile with this name exists": "Un profil portant ce nom existe déjà"
+    },
+    "Enter a name": {
+        "Enter a name": "Saisissez un nom"
+    },
+    "A switch is already running": {
+        "A switch is already running": "Un changement est déjà en cours"
+    },
+    "Profile not found": {
+        "Profile not found": "Profil introuvable"
+    },
+    "Profiles converted for the new DMS version": {
+        "Profiles converted for the new DMS version": "Profils convertis pour la nouvelle version de DMS"
+    },
+    "The active profile was applied again.": {
+        "The active profile was applied again.": "Le profil actif a été réappliqué."
+    },
+    "The active profile could not be applied. Its changes are not saved until a profile is applied.": {
+        "The active profile could not be applied. Its changes are not saved until a profile is applied.": "Impossible d’appliquer le profil actif. Les modifications ne sont plus enregistrées tant qu’aucun profil n’est appliqué."
+    },
+    "Drag a row to change the order.": {
+        "Drag a row to change the order.": "Faites glisser une ligne pour changer l’ordre."
     }
 }

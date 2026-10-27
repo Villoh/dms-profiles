@@ -262,5 +262,50 @@
     },
     "DMS did not load the profile values": {
         "DMS did not load the profile values": "DMS がプロファイルの値を読み込みませんでした"
+    },
+    "Error: %1": {
+        "Error: %1": "エラー: %1"
+    },
+    "Switching to “%1”…": {
+        "Switching to “%1”…": "「%1」に切り替え中…"
+    },
+    "Creating “%1”…": {
+        "Creating “%1”…": "「%1」を作成中…"
+    },
+    "“%1” created and active": {
+        "“%1” created and active": "「%1」を作成して有効にしました"
+    },
+    "“%1” is active": {
+        "“%1” is active": "「%1」が有効です"
+    },
+    "Click to apply · Scroll to browse · Manage profiles in the plugin settings": {
+        "Click to apply · Scroll to browse · Manage profiles in the plugin settings": "クリックで適用 · スクロールで切り替え · 管理はプラグイン設定で"
+    },
+    "The Profiles plugin is not running": {
+        "The Profiles plugin is not running": "プロファイルプラグインが動作していません"
+    },
+    "A profile with this name exists": {
+        "A profile with this name exists": "この名前のプロファイルは既にあります"
+    },
+    "Enter a name": {
+        "Enter a name": "名前を入力してください"
+    },
+    "A switch is already running": {
+        "A switch is already running": "切り替えはすでに実行中です"
+    },
+    "Profile not found": {
+        "Profile not found": "プロファイルが見つかりません"
+    },
+    "Profiles converted for the new DMS version": {
+        "Profiles converted for the new DMS version": "プロファイルを新しい DMS バージョン向けに変換しました"
+    },
+    "The active profile was applied again.": {
+        "The active profile was applied again.": "有効なプロファイルを再適用しました。"
+    },
+    "The active profile could not be applied. Its changes are not saved until a profile is applied.": {
+        "The active profile could not be applied. Its changes are not saved until a profile is applied.": "有効なプロファイルを適用できませんでした。プロファイルを適用するまで変更は保存されません。"
+    },
+    "Drag a row to change the order.": {
+        "Drag a row to change the order.": "行をドラッグして並べ替えます。"
     }
 }

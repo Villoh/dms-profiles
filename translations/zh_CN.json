@@ -262,5 +262,50 @@
     },
     "DMS did not load the profile values": {
         "DMS did not load the profile values": "DMS 未加载配置值"
+    },
+    "Error: %1": {
+        "Error: %1": "错误：%1"
+    },
+    "Switching to “%1”…": {
+        "Switching to “%1”…": "正在切换到“%1”…"
+    },
+    "Creating “%1”…": {
+        "Creating “%1”…": "正在创建“%1”…"
+    },
+    "“%1” created and active": {
+        "“%1” created and active": "“%1”已创建并启用"
+    },
+    "“%1” is active": {
+        "“%1” is active": "“%1”已启用"
+    },
+    "Click to apply · Scroll to browse · Manage profiles in the plugin settings": {
+        "Click to apply · Scroll to browse · Manage profiles in the plugin settings": "点击应用 · 滚动浏览 · 在插件设置中管理"
+    },
+    "The Profiles plugin is not running": {
+        "The Profiles plugin is not running": "配置插件未运行"
+    },
+    "A profile with this name exists": {
+        "A profile with this name exists": "已有同名配置"
+    },
+    "Enter a name": {
+        "Enter a name": "请输入名称"
+    },
+    "A switch is already running": {
+        "A switch is already running": "已有切换正在进行"
+    },
+    "Profile not found": {
+        "Profile not found": "未找到配置"
+    },
+    "Profiles converted for the new DMS version": {
+        "Profiles converted for the new DMS version": "配置已转换为新版 DMS 格式"
+    },
+    "The active profile was applied again.": {
+        "The active profile was applied again.": "已重新应用当前配置。"
+    },
+    "The active profile could not be applied. Its changes are not saved until a profile is applied.": {
+        "The active profile could not be applied. Its changes are not saved until a profile is applied.": "无法应用当前配置。在应用某个配置之前，更改不会被保存。"
+    },
+    "Drag a row to change the order.": {
+        "Drag a row to change the order.": "拖动一行即可调整顺序。"
     }
 }
