@@ -77,6 +77,10 @@ DashTabComponent {
         root.busy = true;
         root.pendingName = name;
         root.status = I18n.trFor("dmsProfiles", "Switching to “%1”…").arg(name);
+        // A profile may put the bar on another edge; the open dash would then
+        // move along with it. Close it like the picker does.
+        if (root.popoutService)
+            root.popoutService.closeDankDash();
     }
 
     function saveProfile(name) {
