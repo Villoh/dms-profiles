@@ -28,7 +28,9 @@ Changes you make in the DMS settings are saved into the active profile after a f
 
 ## Wallpaper picker
 
-`dms ipc call profiles wallpapers` opens the same picker with the pictures in the folder of the current wallpaper. Enter or a click sets one; autosave stores it in the active profile. It uses the picker view and shape you chose for profiles.
+`dms ipc call profiles wallpapers` opens the same picker with the pictures of a wallpaper folder. Enter or a click sets one; autosave stores it in the active profile. It uses the picker view and shape you chose for profiles.
+
+By default that is the folder of the current wallpaper. A profile can have its own wallpaper folder instead, so the picker always opens there, even if the current picture comes from somewhere else: set it by clicking the folder line under the profile name in the settings (the cross removes it), or `dms ipc call profiles folder <slug> /path/to/pictures` (an empty path clears it). It is stored as `wallpaperFolder` in the profile's `profile.json`.
 
 Profiles live in `~/.config/DankMaterialShell/profiles/`, one folder per profile.
 
@@ -85,6 +87,7 @@ Mod+Shift+M { spawn "dms" "ipc" "call" "profiles" "toggle"; }
 ```sh
 dms ipc call profiles toggle
 dms ipc call profiles wallpapers
+dms ipc call profiles folder <slug> <path>
 dms ipc call profiles list
 dms ipc call profiles apply <slug>
 dms ipc call profiles create <name>
