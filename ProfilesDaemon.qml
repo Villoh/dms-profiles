@@ -1070,7 +1070,7 @@ PluginComponent {
     // The picker leaves out hidden profiles, but always shows the active one
     readonly property var profiles: root.wallpaperMode ? root.wallpaperItems : store.profiles.filter(p => p.shown !== false || p.active)
     readonly property string activeLabel: root.wallpaperMode ? I18n.trFor("dmsProfiles", "current wallpaper") : I18n.trFor("dmsProfiles", "active profile")
-    readonly property string emptyLabel: root.wallpaperMode ? I18n.trFor("dmsProfiles", "No pictures found next to the current wallpaper.") : I18n.trFor("dmsProfiles", "No profiles yet. Create one in Settings under Profiles.")
+    readonly property string emptyLabel: root.wallpaperMode ? I18n.trFor("dmsProfiles", "No pictures found in the wallpaper folder.") : I18n.trFor("dmsProfiles", "No profiles yet. Create one in Settings under Profiles.")
     readonly property string pickerView: {
         root._settings;
         return cfg("pickerView", "strip");
@@ -1099,11 +1099,15 @@ PluginComponent {
         SessionData.saveSettings();
     }
 
-    // Opens the picker on the pictures next to the current wallpaper
+    // Opens the picker on the wallpaper folder of the active profile, else on
+    // the pictures next to the current wallpaper
     function showWallpapers() {
+        if (SessionData.perMonitorWallpaper === true)
+            return "the wallpaper picker does not support a wallpaper per monitor";
         const cur = SessionData.wallpaperPath || store.mainWallpaper(root.snapshot().session);
-        const dir = cur.substring(0, cur.lastIndexOf("/"));
-        if (!cur || cur.startsWith("#") || !dir)
+        const entry = store.find(store.activeSlug);
+        const dir = entry && entry.wallpaperFolder ? entry.wallpaperFolder.replace(/\/+$/, "") : cur.substring(0, cur.lastIndexOf("/"));
+        if (!dir || (!entry?.wallpaperFolder && (!cur || cur.startsWith("#"))))
             return "no wallpaper picture";
         const exts = ["jpg", "jpeg", "png", "webp", "bmp", "gif", "avif", "jxl"];
         const test = exts.map(e => "-iname " + store.quote("*." + e)).join(" -o ");
@@ -1112,7 +1116,7 @@ PluginComponent {
                         "slug": f,
                         "name": f.substring(f.lastIndexOf("/") + 1).replace(/\.[^.]+$/, ""),
                         "wallpaper": f,
-                        "thumb": f,
+                        "thumb": f.split("/").map(encodeURIComponent).join("/"),
                         "active": f === cur,
                         "shown": true
                     }));
@@ -1136,6 +1140,7 @@ PluginComponent {
 
     function hidePicker() {
         picker.visible = false;
+        root.wallpaperMode = false;
     }
 
     PanelWindow {
@@ -1249,7 +1254,7 @@ PluginComponent {
 
     // ------------------------------------------------------------------ IPC
     // dms ipc call profiles toggle | wallpapers | list | apply SLUG | create NAME | save
-    //   rename SLUG NAME | remove SLUG | move SLUG left|right|N | reset SLUG
+    //   rename SLUG NAME | folder SLUG PATH | remove SLUG | move SLUG left|right|N | reset SLUG
     //   previewTransition TYPE | setOption KEY VALUE | themeAuto on|off|status
     IpcHandler {
         target: "profiles"
@@ -1266,7 +1271,24 @@ PluginComponent {
             return JSON.stringify(store.profiles);
         }
 
-        // Picker of the pictures in the folder of the current wallpaper
+        // dms ipc call profiles folder SLUG /path/to/pictures  (empty path: back to
+        // the folder of the current wallpaper). The picker opens on this folder.
+        function folder(slug: string, path: string): string {
+            if (!store.find(slug))
+                return "no profile " + slug;
+            let dir = path.replace(/\/+$/, "");
+            if (dir.startsWith("~/"))
+                dir = Quickshell.env("HOME") + dir.substring(1);
+            if (dir && !dir.startsWith("/"))
+                return "the folder must be an absolute path";
+            store.setWallpaperFolder(slug, dir, err => {
+                if (err)
+                    console.warn("Profiles: folder failed:", err);
+            });
+            return "started";
+        }
+
+        // Picker of the pictures in the wallpaper folder of the active profile
         function wallpapers(): string {
             if (picker.visible) {
                 root.hidePicker();
