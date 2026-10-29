@@ -51,12 +51,10 @@ Item {
     // skewed: the card box also holds the slant (as in ProfileCard), the frame is narrower
     readonly property real skew: shape === "skewed" ? -0.35 : 0
     readonly property real frameWidth: centerWidth + skew * centerHeight
-    // distance between cards in frame widths; slanted frames nest, so they can sit closer
-    readonly property real spread: shape === "skewed" ? 0.93 : 0.8
 
     function offset(d) {
         const a = Math.abs(d);
-        return Math.sign(d) * frameWidth * spread * (1 - Math.pow(falloff, a)) / (1 - falloff);
+        return Math.sign(d) * frameWidth * 0.8 * (1 - Math.pow(falloff, a)) / (1 - falloff);
     }
 
     function step(n) {
