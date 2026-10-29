@@ -116,6 +116,13 @@ PluginComponent {
         root._settings;
         return cfg("autosave", true);
     }
+    // Switch to the original wallpaper file while it exists, not to the copy in
+    // the profile folder. Then DMS and the wallpaper plugins see the folder the
+    // picture really lives in (cycling, carousel). The copy is the fallback.
+    readonly property bool useOriginalWallpaper: {
+        root._settings;
+        return cfg("useOriginalWallpaper", true);
+    }
 
     function clone(v) {
         return v === undefined ? undefined : JSON.parse(JSON.stringify(v));
@@ -628,7 +635,7 @@ PluginComponent {
     // once per call. Returns true if anything changed.
     function applyWallpapers(p, slug, wallpaper) {
         const s = p.dms.session;
-        const res = path => store.resolveWallpaper(slug, p, path);
+        const res = path => root.wallpaperFile(slug, p, path);
         const resMap = map => {
             const out = {};
             for (const k in (map || {}))
@@ -714,6 +721,46 @@ PluginComponent {
 
     // The switch runs as a chain of steps; each waits for the previous one.
     property string pendingSlug: ""
+    // Original wallpaper paths of the pending profile that still exist
+    property var originalsFound: ({})
+    // False while the check runs; the switch waits for it, or it could apply the
+    // copy and the next autosave would store the copy's path
+    property bool originalsReady: true
+
+    // Looks, while the switch starts, which original wallpaper files are still
+    // there. Answers long before the wallpaper is applied; until then (or when
+    // the option is off) the copies are used.
+    function findOriginals(p) {
+        root.originalsFound = {};
+        root.originalsReady = !root.useOriginalWallpaper;
+        if (!root.useOriginalWallpaper)
+            return;
+        const main = store.mainWallpaper(p.dms.session);
+        const paths = [main].concat(store.otherWallpapers(p.dms.session, main)).filter(v => v && !String(v).startsWith("#") && !String(v).startsWith(store.root + "/"));
+        if (paths.length === 0) {
+            root.originalsReady = true;
+            return;
+        }
+        const slug = root.pendingSlug;
+        store.sh(paths.map(v => "[ -f " + store.quote(v) + " ] && printf '%s\\n' " + store.quote(v) + "; ").join("") + "true", out => {
+            if (root.pendingSlug !== slug)
+                return;
+            const found = {};
+            String(out).split("\n").filter(v => v).forEach(v => found[v] = true);
+            root.originalsFound = found;
+            root.originalsReady = true;
+        });
+    }
+
+    // The file to show for a saved wallpaper path: the original if the option is
+    // on and it exists, else the copy in the profile folder (`copy` when the
+    // profile has no list of copies), else the path itself
+    function wallpaperFile(slug, p, path, copy) {
+        if (path && root.useOriginalWallpaper && root.originalsFound[path])
+            return path;
+        const saved = store.resolveWallpaper(slug, p, path);
+        return saved !== path || !copy ? saved : copy;
+    }
     property var pendingProfile: null
     property bool pendingSameColors: false
     property real appliedAt: 0
@@ -756,6 +803,7 @@ PluginComponent {
             root.appliedAt = 0;
             root.pendingSlug = slug;
             root.pendingProfile = p;
+            root.findOriginals(p);
             root.lastError = "";
             const want = p.dms.settings || {};
             const wantLight = p.dms.session ? p.dms.session.isLightMode === true : false;
@@ -864,7 +912,7 @@ PluginComponent {
         onRunningChanged: if (running) ticks = 0
         onTriggered: {
             ticks++;
-            if (root.settingsLoaded(root.pendingProfile.dms)) {
+            if (root.originalsReady && root.settingsLoaded(root.pendingProfile.dms)) {
                 stop();
                 root.mark("loaded");
                 root.stepApply();
@@ -883,7 +931,8 @@ PluginComponent {
 
     function stepApply() {
         const p = root.pendingProfile;
-        const wall = p.wallpaper ? store.dir(root.pendingSlug) + "/" + p.wallpaper : "";
+        const copy = p.wallpaper ? store.dir(root.pendingSlug) + "/" + p.wallpaper : "";
+        const wall = root.wallpaperFile(root.pendingSlug, p, store.mainWallpaper(p.dms.session), copy);
         root.applyProfile(p, wall, root.pendingSlug);
         root.mark("applied");
         root.appliedAt = Date.now();
@@ -1258,7 +1307,7 @@ PluginComponent {
         }
 
         function setOption(key: string, value: string): string {
-            const allowed = ["transition", "transitionMs", "transitionGlow", "transitionPool", "pickerView", "pickerShape", "pickerGlow", "pickerRing", "pickerCheck", "pickerCornerTheme", "pickerCorner", "profilePlugins", "saveCommand", "applyCommand", "autosave"];
+            const allowed = ["useOriginalWallpaper", "transition", "transitionMs", "transitionGlow", "transitionPool", "pickerView", "pickerShape", "pickerGlow", "pickerRing", "pickerCheck", "pickerCornerTheme", "pickerCorner", "profilePlugins", "saveCommand", "applyCommand", "autosave"];
             if (allowed.indexOf(key) < 0)
                 return "unknown key, allowed: " + allowed.join(", ");
             let v = value;

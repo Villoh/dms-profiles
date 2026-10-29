@@ -700,6 +700,13 @@ PluginSettings {
         defaultValue: true
     }
 
+    ToggleSetting {
+        settingKey: "useOriginalWallpaper"
+        label: I18n.trFor("dmsProfiles", "Use the original wallpaper file")
+        description: I18n.trFor("dmsProfiles", "Show the picture from where it lives, as long as it exists, so wallpaper cycling and carousels see its folder. The copy in the profile is used when the file is gone.")
+        defaultValue: true
+    }
+
     StringSetting {
         settingKey: "profilePlugins"
         label: I18n.trFor("dmsProfiles", "Plugins saved with a profile")

@@ -24,7 +24,7 @@ Mouse wheel and arrow keys move the selection, Enter or a click applies it, Esca
 
 ## Saving
 
-Changes you make in the DMS settings are saved into the active profile after a few seconds. Each profile remembers how it looked when it was activated, so you can undo your changes from the settings page. The wallpaper is copied into the profile, so moving or deleting the original file does not break it.
+Changes you make in the DMS settings are saved into the active profile after a few seconds. Each profile remembers how it looked when it was activated, so you can undo your changes from the settings page. The wallpaper is copied into the profile, so moving or deleting the original file does not break it. While the original file still exists, switching shows the original and not the copy, so the wallpaper keeps living in its own folder (DMS wallpaper cycling and other plugins see the whole folder). The copy is used when the file is gone. Turn this off with "Use the original wallpaper file" in the settings.
 
 Profiles live in `~/.config/DankMaterialShell/profiles/`, one folder per profile.
 
