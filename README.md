@@ -26,6 +26,10 @@ Mouse wheel and arrow keys move the selection, Enter or a click applies it, Esca
 
 Changes you make in the DMS settings are saved into the active profile after a few seconds. Each profile remembers how it looked when it was activated, so you can undo your changes from the settings page. The wallpaper is copied into the profile, so moving or deleting the original file does not break it. While the original file still exists, switching shows the original and not the copy, so the wallpaper keeps living in its own folder (DMS wallpaper cycling and other plugins see the whole folder). The copy is used when the file is gone. Turn this off with "Use the original wallpaper file" in the settings.
 
+## Wallpaper picker
+
+`dms ipc call profiles wallpapers` opens the same picker with the pictures in the folder of the current wallpaper. Enter or a click sets one; autosave stores it in the active profile. It uses the picker view and shape you chose for profiles.
+
 Profiles live in `~/.config/DankMaterialShell/profiles/`, one folder per profile.
 
 ## Settings of other plugins
@@ -80,6 +84,7 @@ Mod+Shift+M { spawn "dms" "ipc" "call" "profiles" "toggle"; }
 
 ```sh
 dms ipc call profiles toggle
+dms ipc call profiles wallpapers
 dms ipc call profiles list
 dms ipc call profiles apply <slug>
 dms ipc call profiles create <name>

@@ -1062,8 +1062,15 @@ PluginComponent {
     property int selected: 0
     property int gridColumns: 1
 
+    // The picker shows profiles, or (wallpapers) the pictures in the folder of
+    // the current wallpaper. The views read `profiles`, `selected` and
+    // `choose` either way; items have slug, name, wallpaper, thumb and active.
+    property bool wallpaperMode: false
+    property var wallpaperItems: []
     // The picker leaves out hidden profiles, but always shows the active one
-    readonly property var profiles: store.profiles.filter(p => p.shown !== false || p.active)
+    readonly property var profiles: root.wallpaperMode ? root.wallpaperItems : store.profiles.filter(p => p.shown !== false || p.active)
+    readonly property string activeLabel: root.wallpaperMode ? I18n.trFor("dmsProfiles", "current wallpaper") : I18n.trFor("dmsProfiles", "active profile")
+    readonly property string emptyLabel: root.wallpaperMode ? I18n.trFor("dmsProfiles", "No pictures found next to the current wallpaper.") : I18n.trFor("dmsProfiles", "No profiles yet. Create one in Settings under Profiles.")
     readonly property string pickerView: {
         root._settings;
         return cfg("pickerView", "strip");
@@ -1076,10 +1083,49 @@ PluginComponent {
     function choose(index) {
         if (index < 0 || index >= root.profiles.length)
             return;
+        if (root.wallpaperMode) {
+            root.setWallpaper(root.profiles[index].wallpaper);
+            root.hidePicker();
+            return;
+        }
         root.apply(root.profiles[index].slug);
     }
 
+    // Sets the picture like the DMS file browser does; autosave then stores it
+    // in the active profile
+    function setWallpaper(path) {
+        SessionData.setWallpaper(path);
+        SessionData.wallpaperCyclingFolderPath = "";
+        SessionData.saveSettings();
+    }
+
+    // Opens the picker on the pictures next to the current wallpaper
+    function showWallpapers() {
+        const cur = SessionData.wallpaperPath || store.mainWallpaper(root.snapshot().session);
+        const dir = cur.substring(0, cur.lastIndexOf("/"));
+        if (!cur || cur.startsWith("#") || !dir)
+            return "no wallpaper picture";
+        const exts = ["jpg", "jpeg", "png", "webp", "bmp", "gif", "avif", "jxl"];
+        const test = exts.map(e => "-iname " + store.quote("*." + e)).join(" -o ");
+        store.sh("find -L " + store.quote(dir) + " -maxdepth 1 -type f \\( " + test + " \\) | sort", out => {
+            root.wallpaperItems = String(out).split("\n").filter(f => f).map(f => ({
+                        "slug": f,
+                        "name": f.substring(f.lastIndexOf("/") + 1).replace(/\.[^.]+$/, ""),
+                        "wallpaper": f,
+                        "thumb": f,
+                        "active": f === cur,
+                        "shown": true
+                    }));
+            root.wallpaperMode = true;
+            root.selected = Math.max(0, root.wallpaperItems.findIndex(x => x.active));
+            picker.visible = true;
+            Qt.callLater(() => keyCatcher.forceActiveFocus());
+        });
+        return "started";
+    }
+
     function showPicker() {
+        root.wallpaperMode = false;
         store.refresh(() => {
             const active = root.profiles.findIndex(x => x.active);
             root.selected = active >= 0 ? active : 0;
@@ -1202,7 +1248,7 @@ PluginComponent {
     }
 
     // ------------------------------------------------------------------ IPC
-    // dms ipc call profiles toggle | list | apply SLUG | create NAME | save
+    // dms ipc call profiles toggle | wallpapers | list | apply SLUG | create NAME | save
     //   rename SLUG NAME | remove SLUG | move SLUG left|right|N | reset SLUG
     //   previewTransition TYPE | setOption KEY VALUE | themeAuto on|off|status
     IpcHandler {
@@ -1218,6 +1264,15 @@ PluginComponent {
 
         function list(): string {
             return JSON.stringify(store.profiles);
+        }
+
+        // Picker of the pictures in the folder of the current wallpaper
+        function wallpapers(): string {
+            if (picker.visible) {
+                root.hidePicker();
+                return "closed";
+            }
+            return root.showWallpapers();
         }
 
         // dms ipc call profiles show SLUG true|false  (shown in the picker or not)
